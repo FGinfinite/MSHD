@@ -1,40 +1,6 @@
 <template>
 	<div>
 		<el-row :gutter="20">
-			<el-col :span="8">
-				<el-card shadow="hover" class="mgb20" style="height: 252px">
-					<div class="user-info">
-						<el-avatar :size="120" :src="imgurl" />
-						<div class="user-info-cont">
-							<div class="user-info-name">{{ name }}</div>
-							<div>{{ role }}</div>
-						</div>
-					</div>
-					<div class="user-info-list">
-						上次登录时间：
-						<span>2022-10-01</span>
-					</div>
-					<div class="user-info-list">
-						上次登录地点：
-						<span>东莞</span>
-					</div>
-				</el-card>
-				<el-card shadow="hover" style="height: 252px">
-					<template #header>
-						<div class="clearfix">
-							<span>语言详情</span>
-						</div>
-					</template>
-					Vue
-					<el-progress :percentage="79.4" color="#42b983"></el-progress>
-					TypeScript
-					<el-progress :percentage="14" color="#f1e05a"></el-progress>
-					CSS
-					<el-progress :percentage="5.6"></el-progress>
-					HTML
-					<el-progress :percentage="1" color="#f56c6c"></el-progress>
-				</el-card>
-			</el-col>
 			<el-col :span="16">
 				<el-row :gutter="20" class="mgb20">
 					<el-col :span="8">
@@ -54,7 +20,7 @@
 								<el-icon class="grid-con-icon"><ChatDotRound /></el-icon>
 								<div class="grid-cont-right">
 									<div class="grid-num">321</div>
-									<div>系统消息</div>
+									<div>灾情统计数量</div>
 								</div>
 							</div>
 						</el-card>
@@ -65,52 +31,73 @@
 								<el-icon class="grid-con-icon"><Goods /></el-icon>
 								<div class="grid-cont-right">
 									<div class="grid-num">5000</div>
-									<div>商品数量</div>
+									<div>用户数量</div>
 								</div>
 							</div>
 						</el-card>
 					</el-col>
+					
 				</el-row>
-				<el-card shadow="hover" style="height: 403px">
-					<template #header>
-						<div class="clearfix">
-							<span>待办事项</span>
-							<el-button style="float: right; padding: 3px 0" text>添加</el-button>
-						</div>
-					</template>
-
-					<el-table :show-header="false" :data="todoList" style="width: 100%">
-						<el-table-column width="40">
-							<template #default="scope">
-								<el-checkbox v-model="scope.row.status"></el-checkbox>
-							</template>
-						</el-table-column>
+				<el-tabs v-model="message">
+			<el-tab-pane :label="`未读消息(${state.unread.length})`" name="first">
+				<el-table :data="state.unread" :show-header="false" style="width: 100%">
+					<el-table-column>
+						<template #default="scope">
+							<span class="message-title">{{ scope.row.title }}</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="date" width="180"></el-table-column>
+					<el-table-column width="120">
+						<template #default="scope">
+							<el-button size="small" @click="handleRead(scope.$index)">标为已读</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+				<div class="handle-row">
+					<el-button type="primary">全部标为已读</el-button>
+				</div>
+			</el-tab-pane>
+			<el-tab-pane :label="`已读消息(${state.read.length})`" name="second">
+				<template v-if="message === 'second'">
+					<el-table :data="state.read" :show-header="false" style="width: 100%">
 						<el-table-column>
 							<template #default="scope">
-								<div
-									class="todo-item"
-									:class="{
-										'todo-item-del': scope.row.status
-									}"
-								>
-									{{ scope.row.title }}
-								</div>
+								<span class="message-title">{{ scope.row.title }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column prop="date" width="150"></el-table-column>
+						<el-table-column width="120">
+							<template #default="scope">
+								<el-button type="danger" @click="handleDel(scope.$index)">删除</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
-				</el-card>
-			</el-col>
-		</el-row>
-		<el-row :gutter="20">
-			<el-col :span="12">
-				<el-card shadow="hover">
-					<schart ref="bar" class="schart" canvasId="bar" :options="options"></schart>
-				</el-card>
-			</el-col>
-			<el-col :span="12">
-				<el-card shadow="hover">
-					<schart ref="line" class="schart" canvasId="line" :options="options2"></schart>
-				</el-card>
+					<div class="handle-row">
+						<el-button type="danger">删除全部</el-button>
+					</div>
+				</template>
+			</el-tab-pane>
+			<el-tab-pane :label="`回收站(${state.recycle.length})`" name="third">
+				<template v-if="message === 'third'">
+					<el-table :data="state.recycle" :show-header="false" style="width: 100%">
+						<el-table-column>
+							<template #default="scope">
+								<span class="message-title">{{ scope.row.title }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column prop="date" width="150"></el-table-column>
+						<el-table-column width="120">
+							<template #default="scope">
+								<el-button @click="handleRestore(scope.$index)">还原</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<div class="handle-row">
+						<el-button type="danger">清空回收站</el-button>
+					</div>
+				</template>
+			</el-tab-pane>
+		</el-tabs>
 			</el-col>
 		</el-row>
 	</div>
@@ -118,81 +105,55 @@
 
 <script setup lang="ts" name="dashboard">
 import Schart from 'vue-schart';
-import { reactive } from 'vue';
 import imgurl from '../assets/img/img.jpg';
+import { useSidebarStore } from '../store/sidebar';
+import { useTagsStore } from '../store/tags';
+import vHeader from '../components/header.vue';
+import vSidebar from '../components/sidebar.vue';
+import vTags from '../components/tags.vue';
+import { ref, reactive } from 'vue';
 
+const message = ref('first');
+const state = reactive({
+	unread: [
+		{
+			date: '2018-04-19 20:00:00',
+			title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
+		},
+		{
+			date: '2018-04-19 21:00:00',
+			title: '今晚12点整发大红包，先到先得'
+		}
+	],
+	read: [
+		{
+			date: '2018-04-19 20:00:00',
+			title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
+		}
+	],
+	recycle: [
+		{
+			date: '2018-04-19 20:00:00',
+			title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
+		}
+	]
+});
+
+const handleRead = (index: number) => {
+	const item = state.unread.splice(index, 1);
+	state.read = item.concat(state.read);
+};
+const handleDel = (index: number) => {
+	const item = state.read.splice(index, 1);
+	state.recycle = item.concat(state.recycle);
+};
+const handleRestore = (index: number) => {
+	const item = state.recycle.splice(index, 1);
+	state.read = item.concat(state.read);
+};
 const name = localStorage.getItem('ms_username');
 const role: string = name === 'admin' ? '超级管理员' : '普通用户';
 
-const options = {
-	type: 'bar',
-	title: {
-		text: '最近一周各品类销售图'
-	},
-	xRorate: 25,
-	labels: ['周一', '周二', '周三', '周四', '周五'],
-	datasets: [
-		{
-			label: '家电',
-			data: [234, 278, 270, 190, 230]
-		},
-		{
-			label: '百货',
-			data: [164, 178, 190, 135, 160]
-		},
-		{
-			label: '食品',
-			data: [144, 198, 150, 235, 120]
-		}
-	]
-};
-const options2 = {
-	type: 'line',
-	title: {
-		text: '最近几个月各品类销售趋势图'
-	},
-	labels: ['6月', '7月', '8月', '9月', '10月'],
-	datasets: [
-		{
-			label: '家电',
-			data: [234, 278, 270, 190, 230]
-		},
-		{
-			label: '百货',
-			data: [164, 178, 150, 135, 160]
-		},
-		{
-			label: '食品',
-			data: [74, 118, 200, 235, 90]
-		}
-	]
-};
-const todoList = reactive([
-	{
-		title: '今天要修复100个bug',
-		status: false
-	},
-	{
-		title: '今天要修复100个bug',
-		status: false
-	},
-	{
-		title: '今天要写100行代码加几个bug吧',
-		status: false
-	},
-	{
-		title: '今天要修复100个bug',
-		status: false
-	},
-	{
-		title: '今天要修复100个bug',
-		status: true
-	},
-	{
-		title: '今天要写100行代码加几个bug吧',
-		status: true
-	}
-]);
 </script>
 
 <style scoped>
@@ -204,12 +165,13 @@ const todoList = reactive([
 	display: flex;
 	align-items: center;
 	height: 100px;
+	
 }
 
 .grid-cont-right {
 	flex: 1;
 	text-align: center;
-	font-size: 14px;
+	font-size: 1px;
 	color: #999;
 }
 
@@ -282,7 +244,7 @@ const todoList = reactive([
 }
 
 .mgb20 {
-	margin-bottom: 20px;
+	margin-bottom: 100px;
 }
 
 .todo-item {
@@ -297,5 +259,11 @@ const todoList = reactive([
 .schart {
 	width: 100%;
 	height: 300px;
+}
+.message-title {
+	cursor: pointer;
+}
+.handle-row {
+	margin-top: 30px;
 }
 </style>

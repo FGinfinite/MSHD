@@ -57,15 +57,7 @@ const routes: RouteRecordRaw[] = [
                 },
                 component: () => import(/* webpackChunkName: "tabs" */ '../views/tabs.vue'),
             },
-            {
-                path: '/donate',
-                name: 'donate',
-                meta: {
-                    title: '鼓励作者',
-                    permiss: '14',
-                },
-                component: () => import(/* webpackChunkName: "donate" */ '../views/donate.vue'),
-            },
+           
             {
                 path: '/permission',
                 name: 'permission',
@@ -120,13 +112,13 @@ const routes: RouteRecordRaw[] = [
                 component: () => import(/* webpackChunkName: "markdown" */ '../views/markdown.vue'),
             },
             {
-                path: '/export',
-                name: 'export',
+                path: '/visual',
+                name: 'visual',
                 meta: {
-                    title: '导出Excel',
+                    title: '可视化',
                     permiss: '2',
                 },
-                component: () => import(/* webpackChunkName: "export" */ '../views/export.vue'),
+                component: () => import(/* webpackChunkName: "export" */ '../views/visual.vue'),
             },
             {
                 path: '/import',

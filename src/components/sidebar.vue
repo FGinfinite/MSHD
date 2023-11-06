@@ -59,53 +59,58 @@ const items = [
     {
         icon: 'Odometer',
         index: '/dashboard',
-        title: '系统首页',
+        title: '首页',
         permiss: '1',
     },
     {
         icon: 'Calendar',
         index: '1',
-        title: '表格相关',
+        title: '灾情统计',
         permiss: '2',
         subs: [
             {
                 index: '/table',
-                title: '常用表格',
+                title: '统计数据',
                 permiss: '2',
             },
             {
                 index: '/import',
-                title: '导入Excel',
+                title: '统计图表',
                 permiss: '2',
             },
             {
-                index: '/export',
-                title: '导出Excel',
+                index: '/visual',
+                title: '可视化地图',
                 permiss: '2',
             },
         ],
     },
-    {
-        icon: 'DocumentCopy',
-        index: '/tabs',
-        title: 'tab选项卡',
-        permiss: '3',
-    },
+    // {
+    //     icon: 'DocumentCopy',
+    //     index: '/tabs',
+    //     title: 'tab选项卡',
+    //     permiss: '3',
+    // },
     {
         icon: 'Edit',
         index: '3',
-        title: '表单相关',
+        title: '数据录入',
         permiss: '4',
         subs: [
             {
                 index: '/form',
-                title: '基本表单',
+                title: '一体化编码格式',
                 permiss: '5',
             },
             {
                 index: '/upload',
-                title: '文件上传',
+                title: '灾情文件',
                 permiss: '6',
+            },
+            {
+                index: '/upload',
+                title: '灾情音频文件',
+                permiss: '10',
             },
             {
                 index: '4',
@@ -126,30 +131,30 @@ const items = [
             },
         ],
     },
-    {
-        icon: 'Setting',
-        index: '/icon',
-        title: '自定义图标',
-        permiss: '10',
-    },
-    {
-        icon: 'PieChart',
-        index: '/charts',
-        title: 'schart图表',
-        permiss: '11',
-    },
+    // {
+    //     icon: 'Setting',
+    //     index: '/icon',
+    //     title: '自定义图标',
+    //     permiss: '10',
+    // },
+    // {
+    //     icon: 'PieChart',
+    //     index: '/charts',
+    //     title: 'schart图表',
+    //     permiss: '11',
+    // },
     {
         icon: 'Warning',
         index: '/permission',
         title: '权限管理',
         permiss: '13',
     },
-    {
-        icon: 'CoffeeCup',
-        index: '/donate',
-        title: '支持作者',
-        permiss: '14',
-    },
+    // {
+    //     icon: 'CoffeeCup',
+    //     index: '/donate',
+    //     title: '支持作者',
+    //     permiss: '14',
+    // },
 ];
 
 const route = useRoute();
