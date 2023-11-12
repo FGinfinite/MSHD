@@ -3,8 +3,8 @@ import { getBaseURL, get, post, deletes, postFormData } from "../api/requests";
 export const fetchData = (param) => {
     return request({
         url: './table.json',
-        method: 'get'
-        params: params,
+        method: 'get',
+        params: param,
     });
 };
 const HttpManager = {
