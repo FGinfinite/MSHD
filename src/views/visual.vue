@@ -6,28 +6,89 @@
 import { onMounted, onUnmounted } from "vue";
 import AMapLoader from "@amap/amap-jsapi-loader";
 
-// Todo: 1. 样式设置 2.数据设置
-
 var map = null;
 var loca = null;
 var pointLayer = null;
 var dataSource = null;
 
 onMounted(() => {
+  window._AMapSecurityConfig = {
+    securityJsCode: "42a4943fb43edf1ae68a202b096064c4",
+  };
+  function getGeoJson() {
+    const district = new AMap.DistrictSearch({
+      // 关键字对应的行政区级别，country表示国家
+      level: "province",
+      // 显示下级行政区级数，1表示返回下一级行政区
+      subdistrict: 1,
+      // 是否显示边界
+      showbiz: false,
+      // 返回行政区边界坐标拐点数组
+      extensions: "all",
+    });
+
+    let test_geojson = null;
+    // 搜索行政区边界
+    district.search("北京", (status, result) => {
+      if (status === "complete") {
+        // 将边界数据转换为geojson格式
+        test_geojson = {
+          type: "FeatureCollection",
+          features: [],
+        };
+        const bounds = result.districtList[0].boundaries;
+        for (let i = 0; i < bounds.length; i++) {
+          const polygon = {
+            type: "Feature",
+            properties: {
+              name: "北京市",
+              value: 37,
+              health: 0.626965,
+              zylsd: 40.959447,
+            },
+            geometry: {
+              type: "Polygon",
+              coordinates: [bounds[i]],
+            },
+          };
+          test_geojson.features.push(polygon);
+        }
+
+        console.log("test_json: " + test_geojson);
+        return test_geojson;
+        //   // 将geojson数据保存到文件
+        //   const blob = new Blob([JSON.stringify(test_geojson)], {
+        //     type: "application/json",
+        //   });
+        //   const link = document.createElement("a");
+        //   link.href = URL.createObjectURL(blob);
+        //   link.download = "beijing.geojson";
+        //   link.click();
+      }
+    });
+  }
   AMapLoader.load({
-    key: "497fa30626d9f0c23cb506cd479a5af8", // 申请好的Web端开发者Key，首次调用 load 时必填
-    version: "2.0", // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
-    plugins: [], // 需要使用的的插件列表，如比例尺'AMap.Scale'等
+    key: "497fa30626d9f0c23cb506cd479a5af8",
+    version: "2.0",
+    plugins: ["AMap.DistrictSearch"],
     Loca: {
       version: "2.0.0",
     },
   }).then((AMap) => {
+    var pl = new Loca.PolygonLayer({
+      // loca,
+      zIndex: 120,
+      opacity: 0.8,
+      shininess: 10,
+      hasSide: true,
+    });
+    
     map = new AMap.Map("map_container", {
       zoom: 11.14,
       viewMode: "3D",
       pitch: 45,
-      mapStyle: "amap://styles/45311ae996a8bea0da10ad5151f72979",
-      center: [120.109233, 30.246411],
+      mapStyle: "amap://styles/whitesmoke",
+      center: [116.38, 39.9],
       showBuildingBlock: false,
       showLabel: false,
     });
@@ -52,10 +113,6 @@ onMounted(() => {
       // 距离表示从光源到光照强度为 0 的位置，0 就是光不会消失。
       distance: 50000,
     };
-    // 数据来源
-    var geo = new Loca.GeoJSONSource({
-      url: "https://a.amap.com/Loca/static/loca-v2/demos/mock_data/hz_gn.json",
-    });
 
     var colors = [
       "#FFF8B4",
@@ -69,16 +126,14 @@ onMounted(() => {
       "#003829",
     ].reverse();
     var height = [1000, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000];
-    var pl = new Loca.PolygonLayer({
-      // loca,
-      zIndex: 120,
-      opacity: 0.8,
-      // cullface: 'none',
-      shininess: 10,
-      hasSide: true,
-    });
 
-    pl.setSource(geo);
+    // 数据来源
+    var geo_data = new Loca.GeoJSONSource({
+      data: getGeoJson(),
+    });
+    console.log("geo_data: " + geo_data);
+    console.log("pl: " + pl);
+
     pl.setStyle({
       topColor: function (index, feature) {
         var v = feature.properties.health * 100;
@@ -172,9 +227,11 @@ onMounted(() => {
       },
       altitude: 0,
     });
+
+    pl.setSource(geo_data);
     loca.add(pl);
 
-    // 图例
+    // 左下角的图例
     var lengend = new Loca.Legend({
       loca: loca,
       title: {
