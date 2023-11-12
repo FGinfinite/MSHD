@@ -7,11 +7,20 @@
 					<el-option key="2" label="湖南省" value="湖南省"></el-option>
 
 				</el-select>
-				<el-select v-model="query.time" placeholder="时间" class="handle-select mr10">
-					<el-option key="1" label="广东省" value="广东省"></el-option>
-					<el-option key="2" label="湖南省" value="湖南省"></el-option>
-
-				</el-select>
+				<el-form-item  prop ="date">
+                    <el-col :span="11">
+                        <el-form-item prop="date1">
+                            <el-date-picker
+                                type="date"
+                                placeholder="日期"
+                                v-model="query.time"
+                                style="width: 40%"
+                            ></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="line" :span="2">-</el-col>
+                  
+                </el-form-item>
 				<el-select v-model="query.soureInFo" placeholder="来源" class="handle-select mr10">
 					<el-option key="1" label="业务报送数据" value="业务报送数据"></el-option>
 					<el-option key="2" label="泛在感知数据" value="泛在感知数据"></el-option>
@@ -115,18 +124,36 @@ const tableData = ref<TableItem[]>([]);
 const pageTotal = ref(0);
 // 获取表格数据
 const getData = () => {
-	fetchData().then(res => {
+	fetchData(query).then(res => {
 		tableData.value = res.data.list;
 		pageTotal.value = res.data.pageTotal || 50;
 	});
 };
 getData();
-    
-
 // 查询操作
 const handleSearch = () => {
-	query.pageIndex = 1;
-	getData();
+	const queryParams = {
+        pageIndex: query.pageIndex,
+        pageSize: query.pageSize,
+        disaterId: query.disaterId,
+        location: query.location,
+        time: query.time,
+        soureInFo: query.soureInFo,
+    };
+	// 发送查询请求
+    fetchData(queryParams)
+        .then((res) => {
+            tableData.value = res.data.list;
+            pageTotal.value = res.data.pageTotal || 50;
+        })
+        .catch((error) => {
+            console.error('查询失败', error);
+            // 处理错误
+            // ...
+        });
+
+
+	
 };
 // 分页导航
 const handlePageChange = (val: number) => {

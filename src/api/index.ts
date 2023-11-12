@@ -1,9 +1,10 @@
 import request from '../utils/request';
 import { getBaseURL, get, post, deletes, postFormData } from "../api/requests";
-export const fetchData = () => {
+export const fetchData = (param) => {
     return request({
         url: './table.json',
         method: 'get'
+        params: params,
     });
 };
 const HttpManager = {
