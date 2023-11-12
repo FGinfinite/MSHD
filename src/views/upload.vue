@@ -64,10 +64,9 @@ import { ElMessage,UploadProps, UploadUserFile } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
 import { HttpManager } from "../api";
 const handle = (rawFile: any) => {
-    form.sourceInFo = rawFile;
+    form.disaterMediaURL = rawFile;
     console.log('上传的文件：', rawFile);
     console.log(rawFile);
-
 
 };
 const options= [
@@ -257,6 +256,8 @@ const form = reactive({
     disarterInFo: '',
     location: [],
     sourceInFo:[],
+    disaterMediaURL:'',
+
 });
 // 提交
 const onSubmit = async ()=> {
@@ -267,6 +268,7 @@ const onSubmit = async ()=> {
     jsondata['disarterInFo'] = form.disarterInFo;
     jsondata['location'] = form.location;
     jsondata['sourceInFo'] = form.sourceInFo;
+    jsondata['disaterMediaURL'] = form.disaterMediaURL;
     try {
         // 调用 testHttpPost 函数，根据需要换成其他函数
         const response:any = await HttpManager.testHttpPost2(jsondata);
