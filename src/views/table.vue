@@ -5,6 +5,7 @@
 				<el-select v-model="query.location " placeholder="位置" class="handle-select mr10">
 					<el-option key="1" label="广东省" value="广东省"></el-option>
 					<el-option key="2" label="湖南省" value="湖南省"></el-option>
+					<el-option key="3" label="河北省" value="河北省"></el-option>
 
 				</el-select>
 				<el-form-item  prop ="date">
@@ -26,7 +27,7 @@
 					<el-option key="2" label="泛在感知数据" value="泛在感知数据"></el-option>
 					<el-option key="2" label="其他数据" value="其他数据"></el-option>
 				</el-select>
-				<el-select v-model="query.soureInFo" placeholder="载体" class="handle-select mr10">
+				<el-select v-model="query.carrierType" placeholder="载体" class="handle-select mr10">
 					<el-option key="1" label="文本" value="文本"></el-option>
 					<el-option key="2" label="图片" value="图片"></el-option>
 					<el-option key="3" label="音频" value="音频"></el-option>
@@ -118,8 +119,10 @@ const query = reactive({
 	disaterId:'',
 	location :'',
 	time:'',
-	soureInFo:''
+	soureInFo:'',
+	carrierType:''
 });
+
 const tableData = ref<TableItem[]>([]);
 const pageTotal = ref(0);
 // 获取表格数据
@@ -131,27 +134,52 @@ const getData = () => {
 };
 getData();
 // 查询操作
-const handleSearch = () => {
-	const queryParams = {
-        pageIndex: query.pageIndex,
-        pageSize: query.pageSize,
-        disaterId: query.disaterId,
-        location: query.location,
-        time: query.time,
-        soureInFo: query.soureInFo,
-    };
-	// 发送查询请求
-    fetchData(queryParams)
-        .then((res) => {
-            tableData.value = res.data.list;
-            pageTotal.value = res.data.pageTotal || 50;
-        })
-        .catch((error) => {
-            console.error('查询失败', error);
-            // 处理错误
-            // ...
-        });
+const handleSearch = async () => {
+	const formData = new FormData();
+	formData.set('location', query.location);
+	formData.set('date', query.time);
+	formData.set('sourceInfo',query.soureInFo);
+	formData.set('carrierType', query.carrierType);
+	formData.set('disasterCode', query.disaterId);
 
+	try {
+    const response: any = await HttpManager.searchDisaster(formData);
+    console.log('testHttpPost 响应', response);
+    if (response["status"]) {
+        ElMessage.success('查询成功！');
+        // 检查响应中是否有'data'属性，并且'data'属性是否包含'list'和'pageTotal'属性
+        if (response.data && response.data.list && response.data.pageTotal) {
+            tableData.value = response.data.list;
+            pageTotal.value = response.data.pageTotal / 50;
+        } else {
+            console.error('testHttpPost 错误: 响应中缺少预期的数据');
+        }
+    }
+} catch (error) {
+    console.error('testHttpPost 错误', error);
+}
+
+
+
+	// const queryParams = {
+    //     pageIndex: query.pageIndex,
+    //     pageSize: query.pageSize,
+    //     disaterId: query.disaterId,
+    //     location: query.location,
+    //     time: query.time,
+    //     soureInFo: query.soureInFo,
+    // };
+	// // 发送查询请求
+    // fetchData(queryParams)
+    //     .then((res) => {
+    //         tableData.value = res.data.list;
+    //         pageTotal.value = res.data.pageTotal || 50;
+    //     })
+    //     .catch((error) => {
+    //         console.error('查询失败', error);
+    //         // 处理错误
+    //         // ...
+    //     });
 
 	
 };
