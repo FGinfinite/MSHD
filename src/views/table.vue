@@ -2,11 +2,7 @@
 	<div>
 		<div class="container">
 			<div class="handle-box">
-				<el-select v-model="query.location " placeholder="位置" class="handle-select mr10">
-					<el-option key="1" label="广东省" value="广东省"></el-option>
-					<el-option key="2" label="湖南省" value="湖南省"></el-option>
-
-				</el-select>
+				<el-cascader :options="option1" placeholder="位置" v-model="query.location"  style="width: 100px "></el-cascader>
 				<el-form-item  prop ="date">
                     <el-col :span="11">
                         <el-form-item prop="date1">
@@ -21,12 +17,8 @@
                     <el-col class="line" :span="2">-</el-col>
                   
                 </el-form-item>
-				<el-select v-model="query.soureInFo" placeholder="来源" class="handle-select mr10">
-					<el-option key="1" label="业务报送数据" value="业务报送数据"></el-option>
-					<el-option key="2" label="泛在感知数据" value="泛在感知数据"></el-option>
-					<el-option key="2" label="其他数据" value="其他数据"></el-option>
-				</el-select>
-				<el-select v-model="query.soureInFo" placeholder="载体" class="handle-select mr10">
+                <el-cascader :options="options"  placeholder="来源" v-model="query.sourceInFo" style="width: 100px " ></el-cascader>
+				<el-select v-model="query.carrierType" placeholder="载体" class="handle-select mr10">
 					<el-option key="1" label="文本" value="文本"></el-option>
 					<el-option key="2" label="图片" value="图片"></el-option>
 					<el-option key="3" label="音频" value="音频"></el-option>
@@ -102,8 +94,178 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { Delete, Edit, Search, Plus } from '@element-plus/icons-vue';
 import { fetchData } from '../api/index';
 import { HttpManager } from "../api";
+const options= [
+    {
+        value: '业务报送数据',
+        label: '业务报送数据',
+        children: [
+            {
+                value: '前方地震应急指挥部',
+                label: '前方地震应急指挥部',
+               
+            },
+            {
+                value: '后方地震应急指挥部',
+                label: '后方地震应急指挥部',
+            },
+            {
+                value: '应急指挥技术系统',
+                label: '应急指挥技术系统',
+            },
+            {
+                value: '社会服务工程应急救援系统',
+                label: '社会服务工程应急救援系统',
+            },
+            {
+                value: '危险区域评估工作组',
+                label: '危险区域评估工作组',
+            },
+            {
+                value: '震后政府信息支持项目组',
+                label: '震后政府信息支持项目组',
+            },
+            {
+                value: '疫情快速上报接受处理系统',
+                label: '疫情快速上报接受处理系统',
+            },
+            {
+                value: '地方地震局应急信息服务相关技术系统',
+                label: '地方地震局应急信息服务相关技术系统',
+            },
+           
+        ],
+    },
+    {
+        value: '泛在感知数据',
+        label: '泛在感知数据',
+        children: [
+            {
+                value: '互联网感知',
+                label: '互联网感知',
+            },
+            {
+                value: '通信网感知',
+                label: '通信网感知',
+            },
+            {
+                value: '舆情网感知',
+                label: '舆情网感知',
+            },
+            {
+                value: '电力系统感知',
+                label: '电力系统感知',
+            },
+            {
+                value: '交通系统感知',
+                label: '交通系统感知',
+            },
+           
+        ],
+    },
+    {
+        value: '其他数据',
+        label: '其他数据',
+    },
+];
+const option1 = [
+{
+        value: 'A',
+        label: '北京',
+        children: [
+            {
+                value: 'A1',
+                label: '海淀区',
+            },
+            {
+                value: 'A2',
+                label: '东城区',
+            },
+            {
+                value: 'A3',
+                label: '朝阳区',
+            },
+            {
+                value: 'A4',
+                label: '西城区',
+            },
+            {
+                value: 'A5',
+                label: '昌平区',
+            },
+            {
+                value: 'A6',
+                label: '房山区',
+            },
+           
+        ],
+    },
+    {
+        value: 'B',
+        label: '河北省',
+        children: [
+            {
+                value: 'B1',
+                label: '石家庄市',
+            },
+            {
+                value: 'B2',
+                label: '唐山市',
+            },
+            {
+                value: 'B3',
+                label: '秦皇岛市',
+            },
+            {
+                value: 'B4',
+                label: '邯郸市',
+            },
+            {
+                value: 'B5',
+                label: '保定市',
+            },
+            {
+                value:'B6',
+                label:'张家口市'
+            },
+            {
+                value:'B7',
+                label:'廊坊市'
+            }  
+        ],
+    },
+    {
+        value: 'C',
+        label: '山西省',
+        children:[
+            {
+                value:'C1',
+                label:'太原市',
 
-interface TableItem {
+            },
+            {
+                value:'C2',
+                label:'大同市',
+            },
+            {
+                value:'C3',
+                label:'阳泉市',
+            },
+            {
+                value:'C4',
+                label:'晋城市',
+            },
+            {
+                value:'C5',
+                label:'吕梁市',
+            },
+            {
+                value:'C6',
+                label:'长治市',
+            }
+        ]
+    },
+];
+interface TableItem {   //定义表格中每一项数据的结构
 	disaterId:string;
 	location :string;
 	time:string;
@@ -112,49 +274,76 @@ interface TableItem {
 	disarterInFo:string;
 }
 
-const query = reactive({
+const query = reactive({//用于查询的各种属性，如分页信息、灾害 ID、位置、时间、资源信息
 	pageIndex: 1,
 	pageSize: 10,
 	disaterId:'',
 	location :'',
 	time:'',
-	soureInFo:''
+	sourceInFo:'',
+	carrierType:''
 });
-const tableData = ref<TableItem[]>([]);
-const pageTotal = ref(0);
+const tableData = ref<TableItem[]>([]);//存储表格数据数组
+const pageTotal = ref(0);//存储数据总条数，用于分页
 // 获取表格数据
 const getData = () => {
 	fetchData(query).then(res => {
-		tableData.value = res.data.list;
+		tableData.value = res.data.list;//
 		pageTotal.value = res.data.pageTotal || 50;
 	});
 };
 getData();
 // 查询操作
-const handleSearch = () => {
-	const queryParams = {
-        pageIndex: query.pageIndex,
-        pageSize: query.pageSize,
-        disaterId: query.disaterId,
-        location: query.location,
-        time: query.time,
-        soureInFo: query.soureInFo,
-    };
-	// 发送查询请求
-    fetchData(queryParams)
-        .then((res) => {
-            tableData.value = res.data.list;
-            pageTotal.value = res.data.pageTotal || 50;
-        })
-        .catch((error) => {
-            console.error('查询失败', error);
-            // 处理错误
-            // ...
-        });
+const handleSearch = async () => {
+	const formData = new FormData();
+	formData.set('location', query.location);
+	formData.set('date', query.time);
+	formData.set('sourceInfo',query.sourceInFo);
+	formData.set('carrierType', query.carrierType);
+	formData.set('disasterCode', query.disaterId);
 
+	try {
+    const response: any = await HttpManager.searchDisaster(formData);
+    console.log('testHttpPost 响应', response);
+    if (response["status"]) {
+        ElMessage.success('查询成功！');
+        // 检查响应中是否有'data'属性，并且'data'属性是否包含'list'和'pageTotal'属性
+        if (response.data && response.data.list && response.data.pageTotal) {
+            tableData.value = response.data.list;
+            pageTotal.value = response.data.pageTotal / 50;
+        } else {
+            console.error('testHttpPost 错误: 响应中缺少预期的数据');
+        }
+    }
+} catch (error) {
+    console.error('testHttpPost 错误', error);
+}
+
+
+
+	// const queryParams = {
+    //     pageIndex: query.pageIndex,
+    //     pageSize: query.pageSize,
+    //     disaterId: query.disaterId,
+    //     location: query.location,
+    //     time: query.time,
+    //     soureInFo: query.soureInFo,
+    // };
+	// // 发送查询请求
+    // fetchData(queryParams)
+    //     .then((res) => {
+    //         tableData.value = res.data.list;
+    //         pageTotal.value = res.data.pageTotal || 50;
+    //     })
+    //     .catch((error) => {
+    //         console.error('查询失败', error);
+    //         // 处理错误
+    //         // ...
+    //     });
 
 	
 };
+
 // 分页导航
 const handlePageChange = (val: number) => {
 	query.pageIndex = val;
