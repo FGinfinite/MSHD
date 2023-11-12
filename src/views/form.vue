@@ -31,13 +31,16 @@ const formRef = ref<FormInstance>();
 const form = reactive({
     disasterId: '',
     disasterMediaURl: '',
+    carrierType:'文本'
 });
 //编码提交
 
 const onsubmit = async () => {
       const jsondata = {};
-      jsondata['coded_set'] = form.disasterId;
-      jsondata['desc'] = form.disasterMediaURl;
+      jsondata['disasterId'] = form.disasterId;
+      jsondata['disasterMediaURl'] = form.disasterMediaURl;
+      jsondata['carrierType'] = form.carrierType;
+
       try {
         // 调用 testHttpPost 函数，根据需要换成其他函数
         const response:any = await HttpManager.testHttpPost2(jsondata);

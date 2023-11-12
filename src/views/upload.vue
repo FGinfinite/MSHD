@@ -64,81 +64,82 @@ import { ElMessage,UploadProps, UploadUserFile } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
 import { HttpManager } from "../api";
 const handle = (rawFile: any) => {
-    form.disaterMediaURL = rawFile;
+    form.sourceInFo = rawFile;
     console.log('上传的文件：', rawFile);
     console.log(rawFile);
+
 
 };
 const options= [
     {
-        value: 'A',
+        value: '业务报送数据',
         label: '业务报送数据',
         children: [
             {
-                value: 'a1',
+                value: '前方地震应急指挥部',
                 label: '前方地震应急指挥部',
                
             },
             {
-                value: 'a2',
+                value: '后方地震应急指挥部',
                 label: '后方地震应急指挥部',
             },
             {
-                value: 'a3',
+                value: '应急指挥技术系统',
                 label: '应急指挥技术系统',
             },
             {
-                value: 'a4',
+                value: '社会服务工程应急救援系统',
                 label: '社会服务工程应急救援系统',
             },
             {
-                value: 'a5',
+                value: '危险区域评估工作组',
                 label: '危险区域评估工作组',
             },
             {
-                value: 'a6',
+                value: '震后政府信息支持项目组',
                 label: '震后政府信息支持项目组',
             },
             {
-                value: 'a7',
+                value: '疫情快速上报接受处理系统',
                 label: '疫情快速上报接受处理系统',
             },
             {
-                value: 'a8',
+                value: '地方地震局应急信息服务相关技术系统',
                 label: '地方地震局应急信息服务相关技术系统',
             },
            
         ],
     },
     {
-        value: 'b',
+        value: '泛在感知数据',
         label: '泛在感知数据',
         children: [
             {
-                value: 'b1',
+                value: '互联网感知',
                 label: '互联网感知',
             },
             {
-                value: 'b2',
+                value: '通信网感知',
                 label: '通信网感知',
             },
             {
-                value: 'b3',
+                value: '舆情网感知',
                 label: '舆情网感知',
             },
             {
-                value: 'b4',
+                value: '电力系统感知',
                 label: '电力系统感知',
             },
             {
-                value: 'b5',
+                value: '交通系统感知',
                 label: '交通系统感知',
             },
            
         ],
     },
     {
-        value: 'c',
+        value: '其他数据',
         label: '其他数据',
     },
 ];
@@ -268,7 +269,7 @@ const onSubmit = async ()=> {
     jsondata['disarterInFo'] = form.disarterInFo;
     jsondata['location'] = form.location;
     jsondata['sourceInFo'] = form.sourceInFo;
-    jsondata['disaterMediaURL'] = form.disaterMediaURL;
+    
     try {
         // 调用 testHttpPost 函数，根据需要换成其他函数
         const response:any = await HttpManager.testHttpPost2(jsondata);
