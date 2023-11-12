@@ -124,18 +124,36 @@ const tableData = ref<TableItem[]>([]);
 const pageTotal = ref(0);
 // 获取表格数据
 const getData = () => {
-	fetchData().then(res => {
+	fetchData(query).then(res => {
 		tableData.value = res.data.list;
 		pageTotal.value = res.data.pageTotal || 50;
 	});
 };
 getData();
-    
-
 // 查询操作
 const handleSearch = () => {
-	query.pageIndex = 1;
-	getData();
+	const queryParams = {
+        pageIndex: query.pageIndex,
+        pageSize: query.pageSize,
+        disaterId: query.disaterId,
+        location: query.location,
+        time: query.time,
+        soureInFo: query.soureInFo,
+    };
+	// 发送查询请求
+    fetchData(queryParams)
+        .then((res) => {
+            tableData.value = res.data.list;
+            pageTotal.value = res.data.pageTotal || 50;
+        })
+        .catch((error) => {
+            console.error('查询失败', error);
+            // 处理错误
+            // ...
+        });
+
+
+	
 };
 // 分页导航
 const handlePageChange = (val: number) => {
