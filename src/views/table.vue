@@ -294,27 +294,54 @@ const getData = () => {
 };
 getData();
 // 查询操作
-const handleSearch = () => {
-	const queryParams = {
-        
-        disaterId: query.disaterId,
-        location: query.location,
-        time: query.time,
-        sourceInFo: query.sourceInFo,
-		carrierType:query.carrierType
-    };
-	// 发送查询请求
-    fetchData(queryParams)
-        .then((res) => {
-            tableData.value = res.data.list;
-            pageTotal.value = res.data.pageTotal || 50;
-        })
-        .catch((error) => {
-            console.error('查询失败', error);
-            // 处理错误
-            // ...
-        });
+const handleSearch = async () => {
+	const formData = new FormData();
+	formData.set('location', query.location);
+	formData.set('date', query.time);
+	formData.set('sourceInfo',query.sourceInFo);
+	formData.set('carrierType', query.carrierType);
+	formData.set('disasterCode', query.disaterId);
 
+	try {
+    const response: any = await HttpManager.searchDisaster(formData);
+    console.log('testHttpPost 响应', response);
+    if (response["status"]) {
+        ElMessage.success('查询成功！');
+        // 检查响应中是否有'data'属性，并且'data'属性是否包含'list'和'pageTotal'属性
+        if (response.data && response.data.list && response.data.pageTotal) {
+            tableData.value = response.data.list;
+            pageTotal.value = response.data.pageTotal / 50;
+        } else {
+            console.error('testHttpPost 错误: 响应中缺少预期的数据');
+        }
+    }
+} catch (error) {
+    console.error('testHttpPost 错误', error);
+}
+
+
+
+	// const queryParams = {
+    //     pageIndex: query.pageIndex,
+    //     pageSize: query.pageSize,
+    //     disaterId: query.disaterId,
+    //     location: query.location,
+    //     time: query.time,
+    //     soureInFo: query.soureInFo,
+    // };
+	// // 发送查询请求
+    // fetchData(queryParams)
+    //     .then((res) => {
+    //         tableData.value = res.data.list;
+    //         pageTotal.value = res.data.pageTotal || 50;
+    //     })
+    //     .catch((error) => {
+    //         console.error('查询失败', error);
+    //         // 处理错误
+    //         // ...
+    //     });
+
+	
 };
 
 // 分页导航
