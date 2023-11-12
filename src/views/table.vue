@@ -7,11 +7,20 @@
 					<el-option key="2" label="湖南省" value="湖南省"></el-option>
 
 				</el-select>
-				<el-select v-model="query.time" placeholder="时间" class="handle-select mr10">
-					<el-option key="1" label="广东省" value="广东省"></el-option>
-					<el-option key="2" label="湖南省" value="湖南省"></el-option>
-
-				</el-select>
+				<el-form-item  prop ="date">
+                    <el-col :span="11">
+                        <el-form-item prop="date1">
+                            <el-date-picker
+                                type="date"
+                                placeholder="日期"
+                                v-model="query.time"
+                                style="width: 40%"
+                            ></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="line" :span="2">-</el-col>
+                  
+                </el-form-item>
 				<el-select v-model="query.soureInFo" placeholder="来源" class="handle-select mr10">
 					<el-option key="1" label="业务报送数据" value="业务报送数据"></el-option>
 					<el-option key="2" label="泛在感知数据" value="泛在感知数据"></el-option>

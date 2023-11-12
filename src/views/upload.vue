@@ -64,7 +64,10 @@ import { ElMessage,UploadProps, UploadUserFile } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
 import { HttpManager } from "../api";
 const handle = (rawFile: any) => {
+    form.sourceInFo = rawFile;
+    console.log('上传的文件：', rawFile);
     console.log(rawFile);
+
 
 };
 const options= [
