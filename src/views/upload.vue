@@ -1,19 +1,16 @@
 <template>
     <div class="container">
         <el-form ref="formRef" :rules="rules" :model="form" label-width="80px">
-                <el-form-item label="表单名称" prop="name">
-                    <el-input v-model="form.name"></el-input>
+                <el-form-item label="发生地点" prop="region">
+                    <el-cascader :options="option1" v-model="form.location"></el-cascader>
                 </el-form-item>
-                <el-form-item label="选择器" prop="region">
-                    <el-cascader :options="option1" v-model="form.options1"></el-cascader>
-                </el-form-item>
-                <el-form-item label="日期时间">
+                <el-form-item label="日期时间" prop ="date">
                     <el-col :span="11">
                         <el-form-item prop="date1">
                             <el-date-picker
                                 type="date"
                                 placeholder="选择日期"
-                                v-model="form.date1"
+                                v-model="form.date"
                                 style="width: 100%"
                             ></el-date-picker>
                         </el-form-item>
@@ -21,30 +18,30 @@
                     <el-col class="line" :span="2">-</el-col>
                     <el-col :span="11">
                         <el-form-item prop="date2">
-                            <el-time-picker placeholder="选择时间" v-model="form.date2" style="width: 100%">
+                            <el-time-picker placeholder="选择时间" v-model="form.time" style="width: 100%">
                             </el-time-picker>
                         </el-form-item>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="来源" prop="options">
-                    <el-cascader :options="options" v-model="form.options2"></el-cascader>
+                    <el-cascader :options="options" v-model="form.sourceInFo"></el-cascader>
                 </el-form-item>
                 <el-form-item label="文件类型" prop="resource">
-                    <el-radio-group v-model="form.resource">
+                    <el-radio-group v-model="form.carrierType">
                         <el-radio label="图片"></el-radio>
                         <el-radio label="音频"></el-radio>
                         <el-radio label="视频"></el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="灾情描述" prop="desc" rules="rules">
-                    <el-input type="textarea" rows="5" v-model="form.desc"></el-input>
+                    <el-input type="textarea" rows="5" v-model="form.disarterInFo"></el-input>
                 </el-form-item>
                
             </el-form>
         <el-upload
             class="upload-demo"
             drag
-            action="http://jsonplaceholder.typicode.com/api/posts/"
+            action="http://jsonplaceholder.typicode.com/api/posts/" 
             multiple
             :on-change="handle"
         >
@@ -55,20 +52,20 @@
             </div>
         </el-upload>
         <el-form-item>
-            <el-form-item label="灾情描述" prop="desc">
-                <el-button type="primary" @click="onSubmit(formRef)">表单提交</el-button>
+                <el-button type="primary" @click="onSubmit()">表单提交</el-button>
                 <el-button @click="onReset(formRef)">重置表单</el-button>
-                </el-form-item>
             </el-form-item>
     </div>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import { ElMessage } from 'element-plus';
+import { ElMessage,UploadProps, UploadUserFile } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
+import { HttpManager } from "../api";
 const handle = (rawFile: any) => {
     console.log(rawFile);
+
 };
 const options= [
     {
@@ -241,36 +238,49 @@ const option1 = [
         ]
     },
 ];
-
-
 const rules: FormRules = {
-    name: [{ required: true, message: '请输入表单名称', trigger: 'blur' }],
+    name: [{ required: true, message: '请输入', trigger: 'blur' }],
+    region: [{ required: true, message: '请输入', trigger: 'blur' }],
+    date: [{ required: true, message: '请输入', trigger: 'blur' }],
+    options: [{ required: true, message: '请输入', trigger: 'blur' }],
+    resource: [{ required: true, message: '请输入', trigger: 'blur' }],
+    rules: [{ required: true, message: '请输入', trigger: 'blur' }],
 };
 const formRef = ref<FormInstance>();
 const form = reactive({
-    name: '',
-    region: '',
-    date1: '',
-    date2: '',
-    delivery: true,
-    type: ['小明'],
-    resource: '小红',
-    desc: '',
-    options1: [],
-    options2:[],
+    date: '',
+    time: '',
+    carrierType: '',
+    disarterInFo: '',
+    location: [],
+    sourceInFo:[],
 });
 // 提交
-const onSubmit = (formEl: FormInstance | undefined) => {
-    // 表单校验
-    if (!formEl) return;
-    formEl.validate((valid) => {
-        if (valid) {
-            console.log(form);
-            ElMessage.success('提交成功！');
-        } else {
-            return false;
+const onSubmit = async ()=> {
+    const jsondata = {};
+    jsondata['date'] = form.date;
+    jsondata['time'] = form.time;
+    jsondata['varrierType'] = form.carrierType;
+    jsondata['disarterInFo'] = form.disarterInFo;
+    jsondata['location'] = form.location;
+    jsondata['sourceInFo'] = form.sourceInFo;
+    try {
+        // 调用 testHttpPost 函数，根据需要换成其他函数
+        const response:any = await HttpManager.testHttpPost2(jsondata);
+        console.log('testHttpPost 响应', response);
+        // 处理响应数据
+        if (response["status"]) {
+          ElMessage.success('提交成功！');
         }
-    });
+      } catch (error) {
+        console.error('testHttpPost 错误', error);
+        // 处理错误
+        // ...
+
+      }
+
+
+   
 };
 // 重置
 const onReset = (formEl: FormInstance | undefined) => {

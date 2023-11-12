@@ -1,12 +1,13 @@
+
 <template>
     <div class="container">
         <div class="form-box">
             <el-form ref="formRef" :rules="rules" :model="form" label-width="80px">
                 <el-form-item label="编码" prop="name">
-                    <el-input v-model="form.coded_set"></el-input>
+                    <el-input v-model="form.disasterId"></el-input>
                 </el-form-item>
                 <el-form-item label="灾情说明" prop="desc">
-                    <el-input type="textarea" rows="5" v-model="form.desc"></el-input>
+                    <el-input type="textarea" rows="5" v-model="form.disasterMediaURl"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button  @click="onsubmit()">表单提交</el-button>
@@ -28,15 +29,15 @@ const rules: FormRules = {
 };
 const formRef = ref<FormInstance>();
 const form = reactive({
-    coded_set: '',
-    desc: '',
+    disasterId: '',
+    disasterMediaURl: '',
 });
 //编码提交
 
 const onsubmit = async () => {
       const jsondata = {};
-      jsondata['coded_set'] = form.coded_set;
-      jsondata['desc'] = form.desc;
+      jsondata['coded_set'] = form.disasterId;
+      jsondata['desc'] = form.disasterMediaURl;
       try {
         // 调用 testHttpPost 函数，根据需要换成其他函数
         const response:any = await HttpManager.testHttpPost2(jsondata);
@@ -55,18 +56,7 @@ const onsubmit = async () => {
     }
 
 // 重置
-const onSubmit = (formEl: FormInstance | undefined) => {
-    // 表单校验
-    if (!formEl) return;
-    formEl.validate((valid) => {
-        if (valid) {
-            console.log(form);
-            ElMessage.success('提交成功！');
-        } else {
-            return false;
-        }
-    });
-};
+
 const onReset = (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     formEl.resetFields();

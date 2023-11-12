@@ -2,44 +2,39 @@
 	<div>
 		<div class="container">
 			<div class="handle-box">
-				<el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
+				<el-select v-model="query.location " placeholder="位置" class="handle-select mr10">
 					<el-option key="1" label="广东省" value="广东省"></el-option>
 					<el-option key="2" label="湖南省" value="湖南省"></el-option>
+
 				</el-select>
-				<el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
+				<el-select v-model="query.time" placeholder="时间" class="handle-select mr10">
+					<el-option key="1" label="广东省" value="广东省"></el-option>
+					<el-option key="2" label="湖南省" value="湖南省"></el-option>
+
+				</el-select>
+				<el-select v-model="query.soureInFo" placeholder="来源" class="handle-select mr10">
+					<el-option key="1" label="业务报送数据" value="业务报送数据"></el-option>
+					<el-option key="2" label="泛在感知数据" value="泛在感知数据"></el-option>
+					<el-option key="2" label="其他数据" value="其他数据"></el-option>
+				</el-select>
+				<el-select v-model="query.soureInFo" placeholder="载体" class="handle-select mr10">
+					<el-option key="1" label="文本" value="文本"></el-option>
+					<el-option key="2" label="图片" value="图片"></el-option>
+					<el-option key="3" label="音频" value="音频"></el-option>
+					<el-option key="4" label="视频" value="视频"></el-option>
+				</el-select>
+				<el-input v-model="query.disaterId" placeholder="请输入灾情码" class="handle-input mr10"></el-input>
 				<el-button type="primary" :icon="Search" @click="handleSearch">搜索</el-button>
-				<el-button type="primary" :icon="Plus">新增</el-button>
+				<!-- <el-button type="primary" :icon="Plus">新增</el-button> -->
 			</div>
 			<el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
-				<el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
-				<el-table-column prop="name" label="用户名"></el-table-column>
-				<el-table-column label="账户余额">
-					<template #default="scope">￥{{ scope.row.money }}</template>
-				</el-table-column>
-				<el-table-column label="头像(查看大图)" align="center">
-					<template #default="scope">
-						<el-image
-							class="table-td-thumb"
-							:src="scope.row.thumb"
-							:z-index="10"
-							:preview-src-list="[scope.row.thumb]"
-							preview-teleported
-						>
-						</el-image>
-					</template>
-				</el-table-column>
-				<el-table-column prop="address" label="地址"></el-table-column>
-				<el-table-column label="状态" align="center">
-					<template #default="scope">
-						<el-tag
-							:type="scope.row.state === '成功' ? 'success' : scope.row.state === '失败' ? 'danger' : ''"
-						>
-							{{ scope.row.state }}
-						</el-tag>
-					</template>
-				</el-table-column>
-
-				<el-table-column prop="date" label="注册时间"></el-table-column>
+				<el-table-column prop="disaterId" label="灾情码" width="100" align="center"></el-table-column>
+				<el-table-column prop="location" label="位置" align="center"></el-table-column>
+				<el-table-column label="时间" align="center"></el-table-column>
+				<el-table-column label="消息来源" align="center"></el-table-column>
+				<el-table-column prop="carrierType" label="载体" align="center"></el-table-column>
+				<el-table-column label="灾情信息" align="center"></el-table-column>
+				<el-table-column prop="imforation" label="详细信息" align="center"></el-table-column>
 				<el-table-column label="操作" width="220" align="center">
 					<template #default="scope">
 						<el-button text :icon="Edit" @click="handleEdit(scope.$index, scope.row)" v-permiss="15">
@@ -62,16 +57,25 @@
 				></el-pagination>
 			</div>
 		</div>
-
 		<!-- 编辑弹出框 -->
 		<el-dialog title="编辑" v-model="editVisible" width="30%">
 			<el-form label-width="70px">
-				<el-form-item label="用户名">
-					<el-input v-model="form.name"></el-input>
+				<el-form-item label="灾情码">
+					<el-input v-model="form.sourceInFo"></el-input>
 				</el-form-item>
-				<el-form-item label="地址">
-					<el-input v-model="form.address"></el-input>
+				<el-form-item label="位置">
+					<el-input v-model="form.location"></el-input>
 				</el-form-item>
+				<el-form-item label="时间">
+					<el-input v-model="form.time"></el-input>
+				</el-form-item>
+				<el-form-item label="信息来源">
+					<el-input v-model="form.sourceInFo"></el-input>
+				</el-form-item>
+				<el-form-item label="载体">
+					<el-input v-model="form.carrierType"></el-input>
+				</el-form-item>
+
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -88,21 +92,24 @@ import { ref, reactive } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Delete, Edit, Search, Plus } from '@element-plus/icons-vue';
 import { fetchData } from '../api/index';
+import { HttpManager } from "../api";
 
 interface TableItem {
-	id: number;
-	name: string;
-	money: string;
-	state: string;
-	date: string;
-	address: string;
+	disaterId:string;
+	location :string;
+	time:string;
+	sourceInFo:string ;
+	carrierType:string;
+	disarterInFo:string;
 }
 
 const query = reactive({
-	address: '',
-	name: '',
 	pageIndex: 1,
-	pageSize: 10
+	pageSize: 10,
+	disaterId:'',
+	location :'',
+	time:'',
+	soureInFo:''
 });
 const tableData = ref<TableItem[]>([]);
 const pageTotal = ref(0);
@@ -114,6 +121,7 @@ const getData = () => {
 	});
 };
 getData();
+    
 
 // 查询操作
 const handleSearch = () => {
@@ -143,20 +151,39 @@ const handleDelete = (index: number) => {
 const editVisible = ref(false);
 let form = reactive({
 	name: '',
-	address: ''
+	address: '',
+	disarterInFo:'',
+	disaterId:'',
+	carrierType:'',
+	time:'',
+	location:'',
+	sourceInFo:'',
+
 });
 let idx: number = -1;
 const handleEdit = (index: number, row: any) => {
 	idx = index;
-	form.name = row.name;
-	form.address = row.address;
+	form.disarterInFo = row.disarterInFo;
+	form.disaterId = row.disaterId;
+	form.time = row.time;
+	form.sourceInFo = row.sourceInFo;
+	form.location  = row.location ;
+
+
+
 	editVisible.value = true;
 };
 const saveEdit = () => {
 	editVisible.value = false;
 	ElMessage.success(`修改第 ${idx + 1} 行成功`);
-	tableData.value[idx].name = form.name;
-	tableData.value[idx].address = form.address;
+	tableData.value[idx].disarterInFo = form.disarterInFo;
+	tableData.value[idx].disaterId = form.disaterId;
+	tableData.value[idx].time = form.time;
+	tableData.value[idx].location = form.location;
+	tableData.value[idx].carrierType = form.carrierType;
+	tableData.value[idx].sourceInFo = form.sourceInFo;
+	
+
 };
 </script>
 
@@ -166,7 +193,7 @@ const saveEdit = () => {
 }
 
 .handle-select {
-	width: 120px;
+	width: 90px;
 }
 
 .handle-input {
