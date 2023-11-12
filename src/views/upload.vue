@@ -260,10 +260,11 @@ const onSubmit = async ()=> {
     const jsondata = {};
     jsondata['date'] = form.date;
     jsondata['time'] = form.time;
-    jsondata['varrierType'] = form.carrierType;
-    jsondata['disarterInFo'] = form.disarterInFo;
+    jsondata['carrierType'] = form.carrierType;
+    jsondata['disasterInFo'] = form.disarterInFo;
     jsondata['location'] = form.location;
     jsondata['sourceInFo'] = form.sourceInFo;
+    jsondata['disasterMediaFile'] = ' ';
     try {
         // 调用 testHttpPost 函数，根据需要换成其他函数
         const response:any = await HttpManager.testHttpPost2(jsondata);
