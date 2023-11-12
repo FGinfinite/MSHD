@@ -7,7 +7,7 @@ export const fetchData = () => {
     });
 };
 const HttpManager = {
-    testHttpPost2: (params:any) => postFormData('/MSHD/track/createTrack', params),//文件上传接口
+    testHttpPost2: (params:any) => postFormData('mshd/disaster/createDisasterInformation', params),//文件上传接口
     testHttpPost1: (params:any) =>postFormData('/MSHD/track/createTrack', params),//表单上传接口
     testHttpPost_postTrack: (params:any) => postFormData('/MSHD/track/createTrack', params),
     

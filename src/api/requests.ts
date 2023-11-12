@@ -2,7 +2,7 @@ import axios from "axios";
 import router from "../router";
 
 // const BASE_URL = process.env.NODE_HOST;
-const BASE_URL = "http://localhost:8080/api";
+const BASE_URL = "http://localhost:7999";
 
 axios.defaults.timeout = 5000; // 超时时间设置
 axios.defaults.withCredentials = true; // true允许跨域
