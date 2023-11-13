@@ -7,7 +7,7 @@
                     <el-input v-model="form.disasterId"></el-input>
                 </el-form-item>
                 <el-form-item label="灾情说明" prop="desc">
-                    <el-input type="textarea" rows="5" v-model="form.disasterMediaURl"></el-input>
+                    <el-input type="textarea" rows="5" v-model="form.disasterInfo"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button @click="onsubmit()">表单提交</el-button>
@@ -30,16 +30,16 @@ const rules: FormRules = {
 const formRef = ref<FormInstance>();
 const form = reactive({
     disasterId: '',
-    disasterMediaURl: '',
+    disasterInfo: '',
     carrierType:'文本'
 });
 //编码提交
 
 const onsubmit = async () => {
-      const jsondata = {};
-      jsondata['disasterId'] = form.disasterId;
-      jsondata['disasterMediaURl'] = form.disasterMediaURl;
-      jsondata['carrierType'] = form.carrierType;
+    const formData = new FormData();
+    formData.set('disasterCode', form.disasterId);
+    formData.set('disasterInfo', form.disasterInfo);
+    formData.set('carrierType', form.carrierType);
 
       try {
         // 调用 testHttpPost 函数，根据需要换成其他函数
