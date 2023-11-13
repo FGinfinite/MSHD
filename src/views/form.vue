@@ -43,7 +43,7 @@ const onsubmit = async () => {
 
       try {
         // 调用 testHttpPost 函数，根据需要换成其他函数
-        const response: any = await HttpManager.testHttpPost1(formData);
+        const response: any = await HttpManager.testHttpPost1(jsondata);
         console.log('testHttpPost 响应', response);
         // 处理响应数据
         if (response["status"]) {
