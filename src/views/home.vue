@@ -31,8 +31,8 @@ const message = ref('first');
 const state = reactive({
 	unread: [
 		{
-			date: '2018-04-19 20:00:00',
-			title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
+			date: '2023-11-13 17:00:00',
+			title: '冰岛近期或有较大规模地震和火山喷发'
 		},
 		{
 			date: '2018-04-19 21:00:00',
@@ -42,7 +42,7 @@ const state = reactive({
 	read: [
 		{
 			date: '2018-04-19 20:00:00',
-			title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
+			title: '冰岛近期或有较大规模地震和火山喷发'
 		}
 	],
 	recycle: [

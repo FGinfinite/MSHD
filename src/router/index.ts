@@ -25,7 +25,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/table',
                 name: 'basetable',
                 meta: {
-                    title: '表格',
+                    title: '统计数据',
                     permiss: '2',
                 },
                 component: () => import(/* webpackChunkName: "table" */ '../views/table.vue'),
@@ -57,6 +57,15 @@ const routes: RouteRecordRaw[] = [
                 },
                 component: () => import(/* webpackChunkName: "tabs" */ '../views/tabs.vue'),
             },
+            {
+                path: '/disaterinform',
+                name: 'disaterinform',
+                meta: {
+                    title: '灾情详细信息',
+                    permiss: '2',
+                },
+                component: () => import(/* webpackChunkName: "disaterinform" */ '../views/disaterinform.vue'),
+            },
            
             {
                 path: '/permission',
@@ -71,7 +80,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/upload',
                 name: 'upload',
                 meta: {
-                    title: '上传插件',
+                    title: '多媒体文件',
                     permiss: '6',
                 },
                 component: () => import(/* webpackChunkName: "upload" */ '../views/upload.vue'),
@@ -124,7 +133,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/import',
                 name: 'import',
                 meta: {
-                    title: '导入Excel',
+                    title: '统计图',
                     permiss: '2',
                 },
                 component: () => import(/* webpackChunkName: "import" */ '../views/import.vue'),
