@@ -271,7 +271,7 @@ interface TableItem {   //定义表格中每一项数据的结构
 const query = reactive({//用于查询的各种属性，如分页信息、灾害 ID、位置、时间、资源信息
 	pageIndex: 1,
 	pageSize: 10,
-	disaterId: '',
+	disaterId: '',//灾情一体化信息
 	location: '',
 	time: '',
 	sourceInFo: '',
