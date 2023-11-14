@@ -37,7 +37,7 @@ var dataSource = null;
 var tableData = null;
 var mini_map = null;
 var polygons = [];
-var main_map_data = ref(null);
+
 
 function drawBounds(params) {
   mini_map.remove(polygons);
@@ -65,22 +65,127 @@ function handleCheck(index, row) {
 }
 var table_height = window.innerHeight * 0.95 * 0.33;
 
-onMounted(async() => {
-  // Todo: 通过API获取数据
+var main_map_data = { type: "FeatureCollection", features: [] };
+
+onMounted(async () => {
+  await Promise.all(tableData.map(async (item) => {
+    const response = await fetchDataAndRender(item.address);
+    if (response && response.data && response.data.features && response.data.features.length > 0) {
+      const feature = response.data.features[0];
+      if (feature && feature.geometry && feature.geometry.coordinates) {
+        item.bounds = feature.geometry.coordinates;
+      }
+    }
+  }));
+});
+
+async function fetchDataAndRender(address) {
   try {
-    const response = await axios.get('http://localhost:7999/mshd/district/fetchDistrictData/香港');
-    main_map_data = response.data;
+    const district = getSmallestDistrict(address);
+    const response = await axios.get(`http://localhost:7999/mshd/district/fetchDistrictData/${district}`);
+    main_map_data.features.push(...response.data.features);
     console.log("response data:", response.data);
     console.log("main_map_data:", main_map_data);
-    render();
+    render(); // 渲染
+    return response;
   } catch (error) {
     console.error('Error message:', error.message);
     if (error.response) {
       console.error('Response status:', error.response.status);
       console.error('Response data:', error.response.data);
     }
-  }  
-});
+  }
+}
+
+function getSmallestDistrict(address) {
+  const units = ["省", "自治州", "市", "区", "县", "镇", "乡", "村"];
+  let smallestDistrict = "";
+  let lastPosition = -1;
+
+  // 从最小的行政单位开始搜索，一旦找到第二个单位，就会截取该单位后面的所有字符
+  for (let i = units.length - 1; i >= 0; i--) {
+    const position = address.lastIndexOf(units[i]);
+    if (position !== -1) {
+      if (lastPosition !== -1) {
+        smallestDistrict = address.substring(position + units[i].length);
+        break;
+      } else {
+        lastPosition = position;
+      }
+    }
+  }
+
+  // 如果没有找到任何单位，返回整个地址
+  return smallestDistrict === "" ? address : smallestDistrict;
+}
+
+tableData = [
+  {
+    code: "110101002003",
+    address: "吉林省延边朝鲜族自治州和龙市",
+    date: "2021-08-01 10:00:00",
+    bounds: [
+      [
+        [129.0, 42.0],
+        [129.0, 43.0],
+        [130.0, 43.0],
+        [130.0, 42.0],
+      ],
+    ],
+  },
+  {
+    code: "110101002003",
+    address: "湖北省武汉市",
+    date: "2021-08-01 10:00:00",
+    bounds: [
+      [
+        [129.0, 42.0],
+        [129.0, 43.0],
+        [130.0, 43.0],
+        [130.0, 42.0],
+      ],
+    ],
+  },
+  {
+    code: "110101002003",
+    address: "连云港",
+    date: "2021-08-01 10:00:00",
+    bounds: [
+      [
+        [129.0, 42.0],
+        [129.0, 43.0],
+        [130.0, 43.0],
+        [130.0, 42.0],
+      ],
+    ],
+  },
+  {
+    code: "110101002003",
+    address: "内蒙古",
+    date: "2021-08-01 10:00:00",
+    bounds: [
+      [
+        [129.0, 42.0],
+        [129.0, 43.0],
+        [130.0, 43.0],
+        [130.0, 42.0],
+      ],
+    ],
+  },
+  {
+    code: "110101002003",
+    address: "台湾",
+    date: "2021-08-01 10:00:00",
+    bounds: [
+      [
+        [129.0, 42.0],
+        [129.0, 43.0],
+        [130.0, 43.0],
+        [130.0, 42.0],
+      ],
+    ],
+  },
+];
 
 function render() {
   // 高德地图安全码
@@ -169,8 +274,8 @@ function render() {
 
     // 数据来源
     var geo_data = new Loca.GeoJSONSource({
-      data: main_map_data,
-    });
+  data: main_map_data,
+});
 
     pl.setSource(geo_data);
     pl.setStyle({
@@ -453,24 +558,6 @@ function render() {
       });
   });
 }
-
-
-tableData = [
-  {
-    code: "110101002003",
-    address: "吉林省延边朝鲜族自治州和龙市头道镇",
-    date: "2021-08-01 10:00:00",
-    bounds: [
-      [
-        [129.0, 42.0],
-        [129.0, 43.0],
-        [130.0, 43.0],
-        [130.0, 42.0],
-      ],
-    ],
-  },
-];
-
 </script>
 
 <style scoped>
