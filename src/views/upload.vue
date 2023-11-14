@@ -136,97 +136,97 @@ const options = [
 ];
 const option1 = [
     {
-        value: 'A',
+        value: '北京',
         label: '北京',
         children: [
             {
-                value: 'A1',
+                value: '海淀区',
                 label: '海淀区',
             },
             {
-                value: 'A2',
+                value: '东城区',
                 label: '东城区',
             },
             {
-                value: 'A3',
+                value: '朝阳区',
                 label: '朝阳区',
             },
             {
-                value: 'A4',
+                value: '西城区',
                 label: '西城区',
             },
             {
-                value: 'A5',
+                value: '昌平区',
                 label: '昌平区',
             },
             {
-                value: 'A6',
+                value: '房山区',
                 label: '房山区',
             },
 
         ],
     },
     {
-        value: 'B',
+        value: '河北省',
         label: '河北省',
         children: [
             {
-                value: 'B1',
+                value: '石家庄市',
                 label: '石家庄市',
             },
             {
-                value: 'B2',
+                value: '唐山市',
                 label: '唐山市',
             },
             {
-                value: 'B3',
+                value: '秦皇岛市',
                 label: '秦皇岛市',
             },
             {
-                value: 'B4',
+                value: '邯郸市',
                 label: '邯郸市',
             },
             {
-                value: 'B5',
+                value: '保定市',
                 label: '保定市',
             },
             {
-                value: 'B6',
+                value: '张家口市',
                 label: '张家口市'
             },
             {
-                value: 'B7',
+                value: '廊坊市',
                 label: '廊坊市'
             }
         ],
     },
     {
-        value: 'C',
+        value: '山西省',
         label: '山西省',
         children: [
             {
-                value: 'C1',
+                value: '太原市',
                 label: '太原市',
 
             },
             {
-                value: 'C2',
+                value: '大同市',
                 label: '大同市',
             },
             {
-                value: 'C3',
+                value: '阳泉市',
                 label: '阳泉市',
             },
             {
-                value: 'C4',
+                value: '晋城市',
                 label: '晋城市',
             },
             {
-                value: 'C5',
+                value: '吕梁市',
                 label: '吕梁市',
             },
             {
-                value: 'C6',
+                value: '长治市',
                 label: '长治市',
             }
         ]
