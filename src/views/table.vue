@@ -23,8 +23,6 @@
 					<el-option key="4" label="视频" value="视频"></el-option>
 				</el-select>
 				<el-input v-model="query.disaterId" placeholder="请输入灾情码" class="handle-input mr10"></el-input>
-				<el-button type="primary" :icon="Search" @click="handleSearch">搜索</el-button>
-				<!-- <el-button type="primary" :icon="Plus">新增</el-button> -->
 			</div>
 			<el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
 				<el-table-column prop="disasterCode" label="灾情码" width="100" align="center"></el-table-column>
@@ -33,7 +31,9 @@
 				<el-table-column prop="sourceInfo" label="消息来源" align="center"></el-table-column>
 				<el-table-column prop="carrierType" label="载体" align="center"></el-table-column>
 				<el-table-column prop="disasterInfo" label="灾情信息" align="center"></el-table-column>
-				<el-table-column prop="information" label="详细信息" align="center"></el-table-column>
+				<el-table-column prop="information" label="详细信息" align="center">
+					<router-link to="/disaterinform">灾情详述</router-link>
+				</el-table-column>
 				<el-table-column label="操作" width="220" align="center">
 					<template #default="scope">
 						<el-button text :icon="Edit" @click="handleEdit(scope.$index, scope.row)" v-permiss="15">
@@ -86,6 +86,8 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { Delete, Edit, Search, Plus } from '@element-plus/icons-vue';
 import { fetchData } from '../api/index';
 import { HttpManager } from "../api";
+import { useRoute } from 'vue-router';
+
 const options = [
 	{
 		value: '业务报送数据',
@@ -160,102 +162,102 @@ const options = [
 	},
 ];
 const option1 = [
-	{
-		value: 'A',
-		label: '北京',
-		children: [
-			{
-				value: 'A1',
-				label: '海淀区',
-			},
-			{
-				value: 'A2',
-				label: '东城区',
-			},
-			{
-				value: 'A3',
-				label: '朝阳区',
-			},
-			{
-				value: 'A4',
-				label: '西城区',
-			},
-			{
-				value: 'A5',
-				label: '昌平区',
-			},
-			{
-				value: 'A6',
-				label: '房山区',
-			},
+{
+        value: '北京',
+        label: '北京',
+        children: [
+            {
+                value: '海淀区',
+                label: '海淀区',
+            },
+            {
+                value: '东城区',
+                label: '东城区',
+            },
+            {
+                value: '朝阳区',
+                label: '朝阳区',
+            },
+            {
+                value: '西城区',
+                label: '西城区',
+            },
+            {
+                value: '昌平区',
+                label: '昌平区',
+            },
+            {
+                value: '房山区',
+                label: '房山区',
+            },
+           
+        ],
+    },
+    {
+        value: '河北省',
+        label: '河北省',
+        children: [
+            {
+                value: '石家庄市',
+                label: '石家庄市',
+            },
+            {
+                value: '唐山市',
+                label: '唐山市',
+            },
+            {
+                value: '秦皇岛市',
+                label: '秦皇岛市',
+            },
+            {
+                value: '邯郸市',
+                label: '邯郸市',
+            },
+            {
+                value: '保定市',
+                label: '保定市',
+            },
+            {
+                value:'张家口市',
+                label:'张家口市'
+            },
+            {
+                value:'廊坊市',
+                label:'廊坊市'
+            }  
+        ],
+    },
+    {
+        value: '山西省',
+        label: '山西省',
+        children:[
+            {
+                value:'太原市',
+                label:'太原市',
 
-		],
-	},
-	{
-		value: 'B',
-		label: '河北省',
-		children: [
-			{
-				value: 'B1',
-				label: '石家庄市',
-			},
-			{
-				value: 'B2',
-				label: '唐山市',
-			},
-			{
-				value: 'B3',
-				label: '秦皇岛市',
-			},
-			{
-				value: 'B4',
-				label: '邯郸市',
-			},
-			{
-				value: 'B5',
-				label: '保定市',
-			},
-			{
-				value: 'B6',
-				label: '张家口市'
-			},
-			{
-				value: 'B7',
-				label: '廊坊市'
-			}
-		],
-	},
-	{
-		value: 'C',
-		label: '山西省',
-		children: [
-			{
-				value: 'C1',
-				label: '太原市',
-
-			},
-			{
-				value: 'C2',
-				label: '大同市',
-			},
-			{
-				value: 'C3',
-				label: '阳泉市',
-			},
-			{
-				value: 'C4',
-				label: '晋城市',
-			},
-			{
-				value: 'C5',
-				label: '吕梁市',
-			},
-			{
-				value: 'C6',
-				label: '长治市',
-			}
-		]
-	},
+            },
+            {
+                value:'大同市',
+                label:'大同市',
+            },
+            {
+                value:'阳泉市',
+                label:'阳泉市',
+            },
+            {
+                value:'晋城市',
+                label:'晋城市',
+            },
+            {
+                value:'吕梁市',
+                label:'吕梁市',
+            },
+            {
+                value:'长治市',
+                label:'长治市',
+            }
+        ]
+    },
 ];
 interface TableItem {   //定义表格中每一项数据的结构
 	disasterCode: string;
@@ -299,7 +301,6 @@ const handleSearch = async () => {
 		console.error('testHttpPost 错误', error);
 	}
 };
-
 const tableData = ref<TableItem[]>([]);//存储表格数据数组
 const pageTotal = ref(0);//存储数据总条数，用于分页
 // 获取表格数据
@@ -364,7 +365,6 @@ const saveEdit = () => {
 
 };
 </script>
-
 <style scoped>
 .handle-box {
 	margin-bottom: 20px;
