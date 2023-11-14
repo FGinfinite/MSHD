@@ -67,7 +67,10 @@ var table_height = window.innerHeight * 0.95 * 0.33;
 
 var main_map_data = { type: "FeatureCollection", features: [] };
 
+tableData = [];
+
 onMounted(async () => {
+  await fetchDataFromDatabase();
   await Promise.all(tableData.map(async (item) => {
     const response = await fetchDataAndRender(item.address);
     if (response && response.data && response.data.features && response.data.features.length > 0) {
@@ -78,6 +81,22 @@ onMounted(async () => {
     }
   }));
 });
+
+async function fetchDataFromDatabase() {
+  try {
+    const response = await axios.get('http://localhost:7999/mshd/disaster/searchDisaster'); 
+    const data = response.data;
+    data.forEach(item => {
+      tableData.push({
+        code: item.disasterCode, 
+        address: item.location, 
+        date: item.time, 
+      })
+    });
+  } catch (error) {
+    console.error('Error while fetching data from database:', error.message);
+  }
+}
 
 async function fetchDataAndRender(address) {
   try {
@@ -175,6 +194,97 @@ tableData = [
   {
     code: "110101002003",
     address: "台湾",
+    date: "2021-08-01 10:00:00",
+    bounds: [
+      [
+        [129.0, 42.0],
+        [129.0, 43.0],
+        [130.0, 43.0],
+        [130.0, 42.0],
+      ],
+    ],
+  },
+  {
+    code: "110101002003",
+    address: "西藏",
+    date: "2021-08-01 10:00:00",
+    bounds: [
+      [
+        [129.0, 42.0],
+        [129.0, 43.0],
+        [130.0, 43.0],
+        [130.0, 42.0],
+      ],
+    ],
+  },
+  {
+    code: "110101002003",
+    address: "新疆",
+    date: "2021-08-01 10:00:00",
+    bounds: [
+      [
+        [129.0, 42.0],
+        [129.0, 43.0],
+        [130.0, 43.0],
+        [130.0, 42.0],
+      ],
+    ],
+  },
+  {
+    code: "110101002003",
+    address: "重庆",
+    date: "2021-08-01 10:00:00",
+    bounds: [
+      [
+        [129.0, 42.0],
+        [129.0, 43.0],
+        [130.0, 43.0],
+        [130.0, 42.0],
+      ],
+    ],
+  },
+  {
+    code: "110101002003",
+    address: "湖北",
+    date: "2021-08-01 10:00:00",
+    bounds: [
+      [
+        [129.0, 42.0],
+        [129.0, 43.0],
+        [130.0, 43.0],
+        [130.0, 42.0],
+      ],
+    ],
+  },
+  {
+    code: "110101002003",
+    address: "广州",
+    date: "2021-08-01 10:00:00",
+    bounds: [
+      [
+        [129.0, 42.0],
+        [129.0, 43.0],
+        [130.0, 43.0],
+        [130.0, 42.0],
+      ],
+    ],
+  },
+  {
+    code: "110101002003",
+    address: "四川",
+    date: "2021-08-01 10:00:00",
+    bounds: [
+      [
+        [129.0, 42.0],
+        [129.0, 43.0],
+        [130.0, 43.0],
+        [130.0, 42.0],
+      ],
+    ],
+  },
+  {
+    code: "110101002003",
+    address: "浙江",
     date: "2021-08-01 10:00:00",
     bounds: [
       [
