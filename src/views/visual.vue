@@ -1,27 +1,38 @@
 <template>
   <div id="table_view">
-    <div id="recent_data">
-      <el-table
-        :data="tableData"
-        border style="width: 100%"
-        :height="table_height">
-        <el-table-column prop="code" label="编码" width="120" />
-        <el-table-column prop="address" label="位置" width="250" />
-        <el-table-column prop="date" label="时间" width="160" />
-        <el-table-column label="操作">
-          <template #default="scope">
-            <el-button
-              size="small"
-              @click="handleCheck(scope.$index, scope.row)"
-              >查看</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div id="mini_map_container"></div>
+    <el-card header="近期灾情码数据" shadow="hover">
+      <div id="recent_data">
+        <el-table
+          :data="tableData"
+          border
+          style="width: 100%"
+          :height="table_height"
+        >
+          <el-table-column prop="code" label="编码" width="120" />
+          <el-table-column prop="address" label="位置" width="250" />
+          <el-table-column prop="date" label="时间" width="160" />
+          <el-table-column label="操作">
+            <template #default="scope">
+              <el-button
+                size="small"
+                @click="handleCheck(scope.$index, scope.row)"
+                >查看</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </div></el-card
+    ><el-card
+      header="灾情定位"
+      shadow="hover"
+      class="mini_map_container_card"
+    >
+      <div id="mini_map_container"></div
+    ></el-card>
   </div>
-  <div id="map_container"></div>
+  <el-card header="地区灾情分布" shadow="hover" class="map_container_card">
+    <div id="map_container"></div
+  ></el-card>
 </template>
 
 <script setup>
@@ -38,10 +49,9 @@ var dataSource = null;
 var mini_map = null;
 var polygons = [];
 
-
 function drawBounds(params) {
   if (!params || !params.bounds) {
-    console.error('Invalid parameters for drawBounds', params);
+    console.error("Invalid parameters for drawBounds", params);
     return;
   }
   mini_map.remove(polygons);
@@ -72,7 +82,6 @@ var table_height = window.innerHeight * 0.95 * 0.33;
 
 var main_map_data = { type: "FeatureCollection", features: [] };
 
-
 let tableData = ref([]);
 
 onMounted(async () => {
@@ -92,25 +101,29 @@ onMounted(async () => {
   }
 });
 
-async function fetchDataFromDatabase () {
+async function fetchDataFromDatabase() {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await axios.get(`http://localhost:7999/mshd/disaster/fetchAllDisaster`);
+      const response = await axios.get(
+        `http://localhost:7999/mshd/disaster/fetchAllDisaster`
+      );
       if (response && response.data && response.data.length > 0) {
-        tableData.value.push(...response.data.map(item => ({
-          code: item.disasterCode,
-          address: item.location,
-          date: item.date,
-          bounds: [[]],
-        })));
-      console.log("tableData:", tableData.value);
+        tableData.value.push(
+          ...response.data.map((item) => ({
+            code: item.disasterCode,
+            address: item.location,
+            date: item.date,
+            bounds: [[]],
+          }))
+        );
+        console.log("tableData:", tableData.value);
       }
       resolve(tableData.value);
     } catch (error) {
-      console.error('Error message:', error.message);
+      console.error("Error message:", error.message);
       if (error.response) {
-        console.error('Response status:', error.response.status);
-        console.error('Response data:', error.response.data);
+        console.error("Response status:", error.response.status);
+        console.error("Response data:", error.response.data);
       }
       reject(error);
     }
@@ -120,17 +133,19 @@ async function fetchDataFromDatabase () {
 async function fetchDataAndRender(address) {
   try {
     const district = getSmallestDistrict(address);
-    const response = await axios.get(`http://localhost:7999/mshd/district/fetchDistrictData/${district}`);
+    const response = await axios.get(
+      `http://localhost:7999/mshd/district/fetchDistrictData/${district}`
+    );
     main_map_data.features.push(...response.data.features);
     console.log("response data:", response.data);
     console.log("main_map_data:", main_map_data);
     render(); // 渲染
     return response;
   } catch (error) {
-    console.error('Error message:', error.message);
+    console.error("Error message:", error.message);
     if (error.response) {
-      console.error('Response status:', error.response.status);
-      console.error('Response data:', error.response.data);
+      console.error("Response status:", error.response.status);
+      console.error("Response data:", error.response.data);
     }
   }
 }
@@ -144,7 +159,7 @@ function getSmallestDistrict(address) {
   for (let i = units.length - 1; i >= 0; i--) {
     const position = address.lastIndexOf(units[i]);
     if (position !== -1) {
-      if (lastPosition !== -1 || units[i] === ',') {
+      if (lastPosition !== -1 || units[i] === ",") {
         smallestDistrict = address.substring(position + units[i].length).trim();
         break;
       } else {
@@ -274,8 +289,8 @@ function render() {
 
     // 数据来源
     var geo_data = new Loca.GeoJSONSource({
-  data: main_map_data,
-});
+      data: main_map_data,
+    });
 
     pl.setSource(geo_data);
     pl.setStyle({
@@ -563,11 +578,11 @@ function render() {
 <style scoped>
 #map_container {
   position: absolute;
-  left: 40%;
+
   padding: 0px;
   margin: 0px;
-  width: 58%;
-  height: 95%;
+  width: 96%;
+  height: 89%;
   border-radius: 5px;
   border-color: rgb(138, 138, 138);
   border-style: solid;
@@ -579,26 +594,46 @@ function render() {
   padding: 0px;
   margin: 0px;
   width: 39%;
-  height: 95%;
-  border-radius: 5px;
-  border-color: rgb(138, 138, 138);
-  border-style: solid;
-  border-width: 1px;
+  height: 80%;
 }
 
 #recent_data {
-  margin: 10px;
+  margin: -15px;
   padding: 0px;
   height: 35%;
 }
 
 #mini_map_container {
-  margin: 10px;
   padding: 0px;
-  height: 62%;
+  height: 100%;
   border-radius: 5px;
   border-color: rgb(138, 138, 138);
   border-style: solid;
   border-width: 1px;
+}
+
+.map_container_card {
+  position: relative;
+  left: 42%;
+  padding: 0px;
+  height: 83%;
+  width: 57%;
+  border-radius: 5px;
+}
+
+.mini_map_container_card {
+  margin-top: 1%;
+  padding: 0px;
+  height: 53%;
+  width: 100%;
+  border-radius: 5px;
+}
+.mini_map_container_card ::v-deep .el-card__body{
+
+  width: 95%;
+  height: 83%;
+  margin-top: 1%;
+  margin-left: 2.5%;
+  padding: 0px;
 }
 </style>
