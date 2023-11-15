@@ -1,22 +1,17 @@
 <template>
 	<div class="header">
-		<!-- 折叠按钮 -->
-		<!-- <div class="collapse-btn" @click="collapseChage">
-			<el-icon v-if="sidebar.collapse"><Expand /></el-icon>
-			<el-icon v-else><Fold /></el-icon>
-		</div> -->
 		<div class="topleft">
 		<div class="logo">灾情一体化管理平台</div>
 	</div>
 		<div class="header-right">
 			<div class="header-user-con">
-				<!-- 消息中心 -->
+				<!-- 消息中心
 				<div class="btn-bell" @click="router.push('/tabs')">
 					<el-tooltip effect="dark" :content="message ? `有${message}条未读消息` : `消息中心`" placement="bottom">
 						<i class="el-icon-lx-notice"></i>
 					</el-tooltip>
 					<span class="btn-bell-badge" v-if="message"></span>
-				</div>
+				</div> -->
 				<!-- 用户头像 -->
 				<el-avatar class="user-avator" :size="30" :src="imgurl" />
 				<!-- 用户名下拉菜单 -->

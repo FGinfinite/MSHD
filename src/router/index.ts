@@ -14,25 +14,25 @@ const routes: RouteRecordRaw[] = [
         children: [
             {
                 path: '/dashboard',
-                name: 'dashboard',
+                name: '首页',
                 meta: {
-                    title: '系统首页',
+                    title: '首页',
                     permiss: '1',
                 },
                 component: () => import(/* webpackChunkName: "dashboard" */ '../views/dashboard.vue'),
             },
             {
                 path: '/table',
-                name: 'basetable',
+                name: '灾情码列表',
                 meta: {
-                    title: '统计数据',
+                    title: '灾情码列表',
                     permiss: '2',
                 },
                 component: () => import(/* webpackChunkName: "table" */ '../views/table.vue'),
             },
             {
                 path: '/charts',
-                name: 'basecharts',
+                name: '图表',
                 meta: {
                     title: '图表',
                     permiss: '11',
@@ -41,9 +41,9 @@ const routes: RouteRecordRaw[] = [
             },
             {
                 path: '/form',
-                name: 'baseform',
+                name: '灾情码录入',
                 meta: {
-                    title: '表单',
+                    title: '灾情码录入',
                     permiss: '5',
                 },
                 component: () => import(/* webpackChunkName: "form" */ '../views/form.vue'),
@@ -59,7 +59,7 @@ const routes: RouteRecordRaw[] = [
             },
             {
                 path: '/disaterinform',
-                name: 'disaterinform',
+                name: '灾情详细信息',
                 meta: {
                     title: '灾情详细信息',
                     permiss: '2',
@@ -78,9 +78,9 @@ const routes: RouteRecordRaw[] = [
             },
             {
                 path: '/upload',
-                name: 'upload',
+                name: '灾情详情录入',
                 meta: {
-                    title: '多媒体文件',
+                    title: '灾情详情录入',
                     permiss: '6',
                 },
                 component: () => import(/* webpackChunkName: "upload" */ '../views/upload.vue'),
@@ -96,7 +96,7 @@ const routes: RouteRecordRaw[] = [
             },
             {
                 path: '/user',
-                name: 'user',
+                name: '个人中心',
                 meta: {
                     title: '个人中心',
                 },
@@ -122,18 +122,18 @@ const routes: RouteRecordRaw[] = [
             },
             {
                 path: '/visual',
-                name: 'visual',
+                name: '灾情分布总况',
                 meta: {
-                    title: '可视化',
+                    title: '全国灾情分布',
                     permiss: '2',
                 },
                 component: () => import(/* webpackChunkName: "export" */ '../views/visual.vue'),
             },
             {
                 path: '/import',
-                name: 'import',
+                name: '灾情图表统计',
                 meta: {
-                    title: '统计图',
+                    title: '灾情图表统计',
                     permiss: '2',
                 },
                 component: () => import(/* webpackChunkName: "import" */ '../views/import.vue'),
@@ -164,7 +164,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title} | vue-manage-system`;
+    document.title = `${to.meta.title} | 灾情一体化管理平台`;
     const role = localStorage.getItem('ms_username');
     const permiss = usePermissStore();
     if (!role && to.path !== '/login') {

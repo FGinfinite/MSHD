@@ -1,5 +1,5 @@
 <template>
-	<div class="tags" v-if="tags.show">
+	<!-- <div class="tags" v-if="tags.show">
 		<ul>
 			<li
 				class="tags-li"
@@ -27,7 +27,7 @@
 				</template>
 			</el-dropdown>
 		</div>
-	</div>
+	</div> -->
 </template>
 
 <script setup lang="ts">
@@ -88,11 +88,6 @@ const handleTags = (command: string) => {
 	command === 'other' ? closeOther() : closeAll();
 };
 
-// 关闭当前页面的标签页
-// tags.closeCurrentTag({
-//     $router: router,
-//     $route: route
-// });
 </script>
 
 <style>

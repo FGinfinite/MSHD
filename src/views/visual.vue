@@ -1,6 +1,6 @@
 <template>
   <div id="table_view">
-    <el-card header="近期灾情码数据" shadow="hover">
+    <el-card header="灾情区域速查" shadow="hover">
       <div id="recent_data">
         <el-table
           :data="tableData"
@@ -30,7 +30,7 @@
       <div id="mini_map_container"></div
     ></el-card>
   </div>
-  <el-card header="地区灾情分布" shadow="hover" class="map_container_card">
+  <el-card header="全国灾情分布" shadow="hover" class="map_container_card">
     <div id="map_container"></div
   ></el-card>
 </template>
