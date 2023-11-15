@@ -39,7 +39,6 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { onMounted } from 'vue';
 import { useSidebarStore } from '../store/sidebar';
 import { useRouter } from 'vue-router';
 import imgurl from '../assets/img/img.jpg';
@@ -48,16 +47,7 @@ const username: string | null = localStorage.getItem('ms_username');
 const message: number = 2;
 
 const sidebar = useSidebarStore();
-// 侧边栏折叠
-const collapseChage = () => {
-	sidebar.handleCollapse();
-};
 
-onMounted(() => {
-	if (document.body.clientWidth < 1500) {
-		collapseChage();
-	}
-});
 
 // 用户名下拉菜单选择事件
 const router = useRouter();
@@ -77,12 +67,15 @@ const handleCommand = (command: string) => {
 	position: relative;
 	/* box-sizing: border-box; */
 	/* width: 100%; */
-	height: 70px;
+	height: 50px;
 	font-size: 22px;
 	color: #fff;
 	/* margin-left: 29px; */
 	animation: expandAnimation 0.5s ease;
-	background-color: rgb(68, 123, 99);
+	background-color: rgb(83, 164, 120);
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: rgb(115, 208, 166);	
 }
 .header1 {
 	animation: expandAnimation 0.5s ease;

@@ -1,109 +1,108 @@
 <template>
-  <div id="code_view">灾情码：{{ code }}</div>
-
-  <div id="code_detail">
-    <el-collapse v-model="activeNames">
-      <el-collapse-item title="灾情详情" name="1">
-        <el-descriptions
-          class="margin-top"
-          :title="code"
-          :column="3"
-          :size="size"
-          border
-        >
-          <!-- opration按钮 -->
-          <template #extra>
-            <el-button type="primary" v-on:click="location">快速定位</el-button>
-          </template>
-          <el-descriptions-item>
-            <template #label>
-              <div class="cell-item">
-                <el-icon :style="iconStyle">
-                  <MessageBox />
-                </el-icon>
-                灾情信息
-              </div>
-            </template>
-            {{ code_details }}
-          </el-descriptions-item>
-          <el-descriptions-item>
-            <template #label>
-              <div class="cell-item">
-                <el-icon :style="iconStyle">
-                  <Document />
-                </el-icon>
-                载体
-              </div>
-            </template>
-            {{ carrier }}
-          </el-descriptions-item>
-
-          <el-descriptions-item>
-            <template #label>
-              <div class="cell-item">
-                <el-icon :style="iconStyle">
-                  <Connection />
-                </el-icon>
-                来源
-              </div>
-            </template>
-            {{ code_source }}
-          </el-descriptions-item>
-          <el-descriptions-item>
-            <template #label>
-              <div class="cell-item">
-                <el-icon :style="iconStyle">
-                  <User />
-                </el-icon>
-                上传者
-              </div>
-            </template>
-            {{ uploader }}>>
-          </el-descriptions-item>
-
-          <el-descriptions-item>
-            <template #label>
-              <div class="cell-item">
-                <el-icon :style="iconStyle">
-                  <LocationInformation />
-                </el-icon>
-                位置信息
-              </div>
-            </template>
-            {{ address }}
-          </el-descriptions-item>
-        </el-descriptions>
-      </el-collapse-item>
-
-      <el-collapse-item
-        title="地图定位"
-        name="2"
-        id="map_view"
-        v-on:click="drawBounds"
-      >
-        <div id="map_container_view">
-          <div id="map_container">aaa</div>
-        </div>
-      </el-collapse-item>
-
-      <el-collapse-item title="关联文件" name="3">
-        <!-- 文件表格 -->
-        <div id="table_view">
-          <el-table :data="files" border style="width: 100%">
-            <el-table-column prop="name" label="文件名"></el-table-column>
-            <el-table-column prop="type" label="文件类型"></el-table-column>
-            <el-table-column label="操作">
-              <template #default="{ row }">
-                <el-button type="primary" size="mini" v-on:click="openFile(row)"
-                  >打开</el-button
-                >
+  <el-card header="灾情详情" class="detail_form_card">
+    <div id="code_detail">
+      <el-collapse v-model="activeNames">
+        <el-collapse-item title="信息数据" name="1">
+          <el-descriptions
+            class="margin-top"
+            :title="'灾情码：  ' + code"
+            :column="3"
+            :size="size"
+            border
+          >
+            <el-descriptions-item>
+              <template #label>
+                <div class="cell-item">
+                  <el-icon :style="iconStyle">
+                    <MessageBox />
+                  </el-icon>
+                  灾情信息
+                </div>
               </template>
-            </el-table-column>
-          </el-table>
-        </div>
-      </el-collapse-item>
-    </el-collapse>
-  </div>
+              {{ code_details }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template #label>
+                <div class="cell-item">
+                  <el-icon :style="iconStyle">
+                    <Document />
+                  </el-icon>
+                  载体
+                </div>
+              </template>
+              {{ carrier }}
+            </el-descriptions-item>
+
+            <el-descriptions-item>
+              <template #label>
+                <div class="cell-item">
+                  <el-icon :style="iconStyle">
+                    <Connection />
+                  </el-icon>
+                  来源
+                </div>
+              </template>
+              {{ code_source }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template #label>
+                <div class="cell-item">
+                  <el-icon :style="iconStyle">
+                    <User />
+                  </el-icon>
+                  上传者
+                </div>
+              </template>
+              {{ uploader }}>>
+            </el-descriptions-item>
+
+            <el-descriptions-item>
+              <template #label>
+                <div class="cell-item">
+                  <el-icon :style="iconStyle">
+                    <LocationInformation />
+                  </el-icon>
+                  位置信息
+                </div>
+              </template>
+              {{ address }}
+            </el-descriptions-item>
+          </el-descriptions>
+        </el-collapse-item>
+
+        <el-collapse-item
+          title="地图定位"
+          name="2"
+          id="map_view"
+          v-on:click="drawBounds"
+        >
+          <div id="map_container_view">
+            <div id="map_container"></div>
+          </div>
+        </el-collapse-item>
+
+        <el-collapse-item title="关联文件" name="3">
+          <!-- 文件表格 -->
+          <div id="table_view">
+            <el-table :data="files" border style="width: 100%">
+              <el-table-column prop="name" label="文件名"></el-table-column>
+              <el-table-column prop="type" label="文件类型"></el-table-column>
+              <el-table-column label="操作" align="center">
+                <template #default="{ row }">
+                  <el-button
+                    type="primary"
+                    size="mini"
+                    v-on:click="openFile(row)"
+                    >查看</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
+    </div></el-card
+  >
 </template>
 
 <script setup>
@@ -291,10 +290,16 @@ AMapLoader.load;
 #map_container {
   margin: 10px;
   padding: 0px;
-  height: 620px;
+  height: 400px;
   border-radius: 5px;
   border-color: rgb(138, 138, 138);
   border-style: solid;
   border-width: 1px;
+
+}
+
+.detail_form_card{
+  margin-left: 20%;
+  width: 60%;
 }
 </style>

@@ -26,7 +26,7 @@
 				<el-button type="primary" :icon="Search" @click="handleSearch">搜索</el-button>
 			</div>
 			<el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
-				<el-table-column prop="disasterCode" label="灾情码" width="100" align="center"></el-table-column>
+				<el-table-column prop="disasterCode" label="灾情码" width="340" align="center"></el-table-column>
 				<el-table-column prop="location" label="位置" align="center"></el-table-column>
 				<el-table-column prop="date" label="时间" align="center"></el-table-column>
 				<el-table-column prop="sourceInfo" label="消息来源" align="center"></el-table-column>
