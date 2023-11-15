@@ -48,12 +48,12 @@
               <template #label>
                 <div class="cell-item">
                   <el-icon :style="iconStyle">
-                    <User />
+                    <Clock />
                   </el-icon>
-                  上传者
+                  时间
                 </div>
               </template>
-              {{ uploader }}>>
+              {{ date }}
             </el-descriptions-item>
 
             <el-descriptions-item>
@@ -107,6 +107,7 @@
 
 <script setup>
 import { onMounted, computed, ref } from "vue";
+import { useRoute } from "vue-router";
 import {
   Iphone,
   Location,
@@ -116,39 +117,36 @@ import {
 } from "@element-plus/icons-vue";
 
 import AMapLoader from "@amap/amap-jsapi-loader";
-
 const code = ref("");
 const carrier = ref("");
 const code_source = ref("");
-const uploader = ref("");
+const date = ref("");
 const code_details = ref("");
 const address = ref("");
 const files = ref([]);
+const route = useRoute();
+const { query, params } = useRoute();
+var bounds = null;
 var polygons = [];
 var map = null;
 var map_data = {};
 var renderFlag = false;
 // 临时测试数据
 // Todo: 从后端获取数据
-code.value = "130281113210202302251430001000101001";
-code_source.value = "业务报送数据 - 前方地震应急指挥部";
-uploader.value = "成都市应急管理局";
-code_details.value = "震情 - 震情信息 - 地理位置";
-address.value = "四川省 成都市锦江区沙河街道塔子山社区居委会";
-carrier.value = "图片";
-map_data = {
-  code: "130281113210202302251430001000101001",
-  address: "吉林省延边朝鲜族自治州和龙市头道镇",
-  date: "2021-08-01 10:00:00",
-  bounds: [
-    [
-      [129.0, 42.0],
-      [129.0, 43.0],
-      [130.0, 43.0],
-      [130.0, 42.0],
-    ],
-  ],
-};
+code.value = query.code;
+code_source.value = query.code_source;
+date.value = query.date;
+code_details.value = query.code_details;
+address.value = query.address;
+carrier.value = query.carrier;
+
+console.log(query);
+console.log(code.value);
+console.log(code_source.value);
+console.log(date.value);
+console.log(code_details.value);
+console.log(address.value);
+
 files.value = [
   {
     name: "文件1",
@@ -182,7 +180,6 @@ onMounted(() => {
         center: [116.39, 39.9],
       });
       polygons = [];
-      var bounds = map_data.bounds;
       if (bounds) {
         for (var i = 0; i < bounds.length; i++) {
           var polygon = new AMap.Polygon({
@@ -295,10 +292,9 @@ AMapLoader.load;
   border-color: rgb(138, 138, 138);
   border-style: solid;
   border-width: 1px;
-
 }
 
-.detail_form_card{
+.detail_form_card {
   margin-left: 20%;
   width: 60%;
 }
