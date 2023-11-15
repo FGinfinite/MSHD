@@ -108,28 +108,6 @@ const items = [
                 title: '灾情文件',
                 permiss: '6',
             },
-            {
-                index: '/upload',
-                title: '灾情音频文件',
-                permiss: '10',
-            },
-            {
-                index: '4',
-                title: '三级菜单',
-                permiss: '7',
-                subs: [
-                    {
-                        index: '/editor',
-                        title: '富文本编辑器',
-                        permiss: '8',
-                    },
-                    {
-                        index: '/markdown',
-                        title: 'markdown编辑器',
-                        permiss: '9',
-                    },
-                ],
-            },
         ],
     },
     // {
@@ -144,17 +122,11 @@ const items = [
     //     title: 'schart图表',
     //     permiss: '11',
     // },
-    {
-        icon: 'Warning',
-        index: '/permission',
-        title: '权限管理',
-        permiss: '13',
-    },
     // {
-    //     icon: 'CoffeeCup',
-    //     index: '/donate',
-    //     title: '支持作者',
-    //     permiss: '14',
+    //     icon: 'Warning',
+    //     index: '/permission',
+    //     title: '权限管理',
+    //     permiss: '13',
     // },
 ];
 
@@ -167,6 +139,13 @@ const sidebar = useSidebarStore();
 </script>
 
 <style scoped>
+.sidebar{
+    background-color: rgb(133, 208, 178);
+}
+.sidebar-el-menu{
+    
+    background-color: rgb(68, 123, 99);
+}
 /* .sidebar {
     display: block;
     position: absolute;
