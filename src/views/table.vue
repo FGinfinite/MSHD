@@ -94,69 +94,69 @@ const options = [
 		value: '业务报送数据',
 		label: '业务报送数据',
 		children: [
-			{
-				value: '前方地震应急指挥部',
-				label: '前方地震应急指挥部',
-
-			},
-			{
-				value: '后方地震应急指挥部',
-				label: '后方地震应急指挥部',
-			},
-			{
-				value: '应急指挥技术系统',
-				label: '应急指挥技术系统',
-			},
-			{
-				value: '社会服务工程应急救援系统',
-				label: '社会服务工程应急救援系统',
-			},
-			{
-				value: '危险区域评估工作组',
-				label: '危险区域评估工作组',
-			},
-			{
-				value: '震后政府信息支持项目组',
-				label: '震后政府信息支持项目组',
-			},
-			{
-				value: '疫情快速上报接受处理系统',
-				label: '疫情快速上报接受处理系统',
-			},
-			{
-				value: '地方地震局应急信息服务相关技术系统',
-				label: '地方地震局应急信息服务相关技术系统',
-			},
-
-		],
+	
+	{
+		value: '前方地震应急指挥部',
+		label: '前方地震应急指挥部',
 	},
+	{
+		value: '后方地震应急指挥部',
+		label: '后方地震应急指挥部',
+	},
+	{				
+		value: '应急指挥技术系统',
+		label: '应急指挥技术系统',
+	},
+	{
+		
+		value: '社会服务工程应急救援系统',
+		label: '社会服务工程应急救援系统',
+			
+	},
+	{
+		value: '危险区域评估工作组',
+		label: '危险区域评估工作组',
+	},
+	{
+		value: '震后政府信息支持项目组',
+		label: '震后政府信息支持项目组',
+	},
+	{
+		value: '疫情快速上报接受处理系统',
+		label: '疫情快速上报接受处理系统',
+	},
+	{
+		value: '地方地震局应急信息服务相关技术系统',
+		label: '地方地震局应急信息服务相关技术系统',
+	},
+]
+},
 	{
 		value: '泛在感知数据',
 		label: '泛在感知数据',
 		children: [
-			{
-				value: '互联网感知',
-				label: '互联网感知',
-			},
-			{
-				value: '通信网感知',
-				label: '通信网感知',
-			},
-			{
-				value: '舆情网感知',
-				label: '舆情网感知',
-			},
-			{
-				value: '电力系统感知',
-				label: '电力系统感知',
-			},
-			{
-				value: '交通系统感知',
-				label: '交通系统感知',
-			},
-
-		],
+	{
+		value: '互联网感知',
+		label: '互联网感知',
+	},	
+	{
+		value: '通信网感知',
+		label: '通信网感知',
 	},
+	{
+		value: '舆情网感知',
+		label: '舆情网感知',
+	},
+	{
+		value: '电力系统感知',
+		label: '电力系统感知',
+	},
+	{
+		value: '交通系统感知',
+		label: '交通系统感知',
+	},
+]
+},
 	{
 		value: '其他数据',
 		label: '其他数据',
@@ -164,8 +164,8 @@ const options = [
 ];
 const option1 = [
 {
-        value: '北京',
-        label: '北京',
+        value: '北京市',
+        label: '北京市',
         children: [
             {
                 value: '海淀区',
@@ -280,13 +280,22 @@ const query = reactive({//用于查询的各种属性，如分页信息、灾害
 });
 // 查询操作
 const handleSearch = async () => {
+	
 	const formData = new FormData();
-	formData.set('location', query.location);
-	formData.set('date', query.time);
+	//删除地址的连字符
+	let location = query.location;
+	if (typeof location !== 'string') {
+		location = String(location); 
+	}
+	formData.set('location', location.replace(/,/g, ''));
+
+	// formData.set('date', query.time);
+	// 从时间中提取日期部分并格式化为"YYYY-MM-DD"
+    const datePart = query.time ? new Date(query.time).toLocaleDateString('en-CA') : '';
+    formData.set('date', datePart);
 	formData.set('sourceInfo', query.sourceInFo);
 	formData.set('carrierType', query.carrierType);
 	formData.set('disasterCode', query.disaterId);
-
 	try {
 		const response: any = await HttpManager.searchDisaster(formData);
 		console.log('testHttpPost 响应', response);

@@ -100,7 +100,7 @@ async function fetchDataFromDatabase () {
         tableData.value.push(...response.data.map(item => ({
           code: item.disasterCode,
           address: item.location,
-          date: item.time,
+          date: item.date,
           bounds: [[]],
         })));
       console.log("tableData:", tableData.value);
