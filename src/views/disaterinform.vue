@@ -108,6 +108,7 @@
 <script setup>
 import { onMounted, computed, ref } from "vue";
 import { useRoute } from "vue-router";
+import axios from 'axios';
 import {
   Iphone,
   Location,
@@ -126,7 +127,7 @@ const address = ref("");
 const files = ref([]);
 const route = useRoute();
 const { query, params } = useRoute();
-var bounds = null;
+var bounds = ref([]);
 var polygons = [];
 var map = null;
 var map_data = {};
@@ -165,17 +166,17 @@ files.value = [
   },
 ];
 
-onMounted(() => {
-  fetchDataAndRender();
+onMounted(async() => {
+  render();
+  await fetchDataAndRender();
 });
 
 async function fetchDataAndRender() {
   try {
     const district = getSmallestDistrict(getSmallestDistrict(address.value));
     const response = await axios.get(`http://localhost:7999/mshd/district/fetchDistrictData/${district}`);
-    bounds = response.data.features.map(feature => feature.geometry.coordinates);
+    map_data.bounds = response.data.features.map(feature => feature.geometry.coordinates)[0];
     console.log("bounds:", bounds);
-    render(); // 渲染
     return response;
   } catch (error) {
     console.error("Error message:", error.message);
@@ -254,6 +255,7 @@ function drawBounds() {
       map.remove(polygons);
       polygons = [];
       var bounds = map_data.bounds;
+      console.log("boudstodraw", bounds);
       if (bounds) {
         for (var i = 0; i < bounds.length; i++) {
           var polygon = new AMap.Polygon({
