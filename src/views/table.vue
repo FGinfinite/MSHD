@@ -164,8 +164,8 @@ const options = [
 ];
 const option1 = [
 {
-        value: '北京',
-        label: '北京',
+        value: '北京市',
+        label: '北京市',
         children: [
             {
                 value: '海淀区',
@@ -289,13 +289,10 @@ const handleSearch = async () => {
 	}
 	formData.set('location', location.replace(/,/g, ''));
 
-	// 从时间中提取日期部分
-	let time = query.time;
-	if (typeof time !== 'string') {
-		time = String(time); 
-	}
-    const datePart = time ? time.split(' ')[0] : '';
-	formData.set('date', datePart);
+	// formData.set('date', query.time);
+	// 从时间中提取日期部分并格式化为"YYYY-MM-DD"
+    const datePart = query.time ? new Date(query.time).toLocaleDateString('en-CA') : '';
+    formData.set('date', datePart);
 	formData.set('sourceInfo', query.sourceInFo);
 	formData.set('carrierType', query.carrierType);
 	formData.set('disasterCode', query.disaterId);
