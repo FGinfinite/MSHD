@@ -4,8 +4,7 @@
       <el-table
         :data="tableData"
         border style="width: 100%"
-        :height="table_height"
-      >
+        :height="table_height">
         <el-table-column prop="code" label="编码" width="120" />
         <el-table-column prop="address" label="位置" width="250" />
         <el-table-column prop="date" label="时间" width="160" />
@@ -27,6 +26,7 @@
 
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
+import { HttpManager } from "../api";
 import axios from "axios";
 import AMapLoader from "@amap/amap-jsapi-loader";
 
@@ -34,15 +34,20 @@ var map = null;
 var loca = null;
 var pointLayer = null;
 var dataSource = null;
-var tableData = null;
+
 var mini_map = null;
 var polygons = [];
 
 
 function drawBounds(params) {
+  if (!params || !params.bounds) {
+    console.error('Invalid parameters for drawBounds', params);
+    return;
+  }
   mini_map.remove(polygons);
   polygons = [];
   var bounds = params.bounds;
+  // console.log("bounds:", bounds);
   if (bounds) {
     for (var i = 0; i < bounds.length; i++) {
       var polygon = new AMap.Polygon({
@@ -61,41 +66,55 @@ function drawBounds(params) {
 }
 
 function handleCheck(index, row) {
-  drawBounds(tableData[index]);
+  drawBounds(tableData.value[index]);
 }
 var table_height = window.innerHeight * 0.95 * 0.33;
 
 var main_map_data = { type: "FeatureCollection", features: [] };
 
-tableData = [];
+
+let tableData = ref([]);
 
 onMounted(async () => {
   await fetchDataFromDatabase();
-  await Promise.all(tableData.map(async (item) => {
+  for (let i = 0; i < tableData.value.length; i++) {
+    const item = tableData.value[i];
     const response = await fetchDataAndRender(item.address);
     if (response && response.data && response.data.features && response.data.features.length > 0) {
       const feature = response.data.features[0];
+      console.log("feature:", feature);
       if (feature && feature.geometry && feature.geometry.coordinates) {
-        item.bounds = feature.geometry.coordinates;
+        console.log("item.bounds before:", item.bounds);
+        tableData.value[i].bounds = feature.geometry.coordinates;
+        console.log("item.bounds after:", tableData.value[i].bounds);
       }
     }
-  }));
+  }
 });
 
-async function fetchDataFromDatabase() {
-  try {
-    const response = await axios.get('http://localhost:7999/mshd/disaster/searchDisaster'); 
-    const data = response.data;
-    data.forEach(item => {
-      tableData.push({
-        code: item.disasterCode, 
-        address: item.location, 
-        date: item.time, 
-      })
-    });
-  } catch (error) {
-    console.error('Error while fetching data from database:', error.message);
-  }
+async function fetchDataFromDatabase () {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios.get(`http://localhost:7999/mshd/disaster/fetchAllDisaster`);
+      if (response && response.data && response.data.length > 0) {
+        tableData.value.push(...response.data.map(item => ({
+          code: item.disasterCode,
+          address: item.location,
+          date: item.time,
+          bounds: [[]],
+        })));
+      console.log("tableData:", tableData.value);
+      }
+      resolve(tableData.value);
+    } catch (error) {
+      console.error('Error message:', error.message);
+      if (error.response) {
+        console.error('Response status:', error.response.status);
+        console.error('Response data:', error.response.data);
+      }
+      reject(error);
+    }
+  });
 }
 
 async function fetchDataAndRender(address) {
@@ -125,8 +144,8 @@ function getSmallestDistrict(address) {
   for (let i = units.length - 1; i >= 0; i--) {
     const position = address.lastIndexOf(units[i]);
     if (position !== -1) {
-      if (lastPosition !== -1) {
-        smallestDistrict = address.substring(position + units[i].length);
+      if (lastPosition !== -1 || units[i] === ',') {
+        smallestDistrict = address.substring(position + units[i].length).trim();
         break;
       } else {
         lastPosition = position;
@@ -134,6 +153,7 @@ function getSmallestDistrict(address) {
     }
   }
 
+  console.log("smallestDistrict:", smallestDistrict);
   // 如果没有找到任何单位，返回整个地址
   return smallestDistrict === "" ? address : smallestDistrict;
 }
@@ -155,136 +175,6 @@ function getSmallestDistrict(address) {
 //   {
 //     code: "110101002003",
 //     address: "湖北省武汉市",
-//     date: "2021-08-01 10:00:00",
-//     bounds: [
-//       [
-//         [129.0, 42.0],
-//         [129.0, 43.0],
-//         [130.0, 43.0],
-//         [130.0, 42.0],
-//       ],
-//     ],
-//   },
-//   {
-//     code: "110101002003",
-//     address: "连云港",
-//     date: "2021-08-01 10:00:00",
-//     bounds: [
-//       [
-//         [129.0, 42.0],
-//         [129.0, 43.0],
-//         [130.0, 43.0],
-//         [130.0, 42.0],
-//       ],
-//     ],
-//   },
-//   {
-//     code: "110101002003",
-//     address: "内蒙古",
-//     date: "2021-08-01 10:00:00",
-//     bounds: [
-//       [
-//         [129.0, 42.0],
-//         [129.0, 43.0],
-//         [130.0, 43.0],
-//         [130.0, 42.0],
-//       ],
-//     ],
-//   },
-//   {
-//     code: "110101002003",
-//     address: "台湾",
-//     date: "2021-08-01 10:00:00",
-//     bounds: [
-//       [
-//         [129.0, 42.0],
-//         [129.0, 43.0],
-//         [130.0, 43.0],
-//         [130.0, 42.0],
-//       ],
-//     ],
-//   },
-//   {
-//     code: "110101002003",
-//     address: "西藏",
-//     date: "2021-08-01 10:00:00",
-//     bounds: [
-//       [
-//         [129.0, 42.0],
-//         [129.0, 43.0],
-//         [130.0, 43.0],
-//         [130.0, 42.0],
-//       ],
-//     ],
-//   },
-//   {
-//     code: "110101002003",
-//     address: "新疆",
-//     date: "2021-08-01 10:00:00",
-//     bounds: [
-//       [
-//         [129.0, 42.0],
-//         [129.0, 43.0],
-//         [130.0, 43.0],
-//         [130.0, 42.0],
-//       ],
-//     ],
-//   },
-//   {
-//     code: "110101002003",
-//     address: "重庆",
-//     date: "2021-08-01 10:00:00",
-//     bounds: [
-//       [
-//         [129.0, 42.0],
-//         [129.0, 43.0],
-//         [130.0, 43.0],
-//         [130.0, 42.0],
-//       ],
-//     ],
-//   },
-//   {
-//     code: "110101002003",
-//     address: "湖北",
-//     date: "2021-08-01 10:00:00",
-//     bounds: [
-//       [
-//         [129.0, 42.0],
-//         [129.0, 43.0],
-//         [130.0, 43.0],
-//         [130.0, 42.0],
-//       ],
-//     ],
-//   },
-//   {
-//     code: "110101002003",
-//     address: "广州",
-//     date: "2021-08-01 10:00:00",
-//     bounds: [
-//       [
-//         [129.0, 42.0],
-//         [129.0, 43.0],
-//         [130.0, 43.0],
-//         [130.0, 42.0],
-//       ],
-//     ],
-//   },
-//   {
-//     code: "110101002003",
-//     address: "四川",
-//     date: "2021-08-01 10:00:00",
-//     bounds: [
-//       [
-//         [129.0, 42.0],
-//         [129.0, 43.0],
-//         [130.0, 43.0],
-//         [130.0, 42.0],
-//       ],
-//     ],
-//   },
-//   {
-//     code: "110101002003",
-//     address: "浙江",
 //     date: "2021-08-01 10:00:00",
 //     bounds: [
 //       [
