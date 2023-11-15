@@ -11,7 +11,7 @@
           >
             <el-table-column prop="level" label="震级(M)" width="80" />
             <el-table-column prop="time" label="发震时刻(UTC+8)" width="155" />
-            <el-table-column prop="positon" label="经纬度" width="100" />
+            <el-table-column prop="positon" label="经纬度" width="120" />
             <el-table-column prop="depth" label="深度(km)" width="60" />
             <el-table-column prop="address" label="参考位置" />
           </el-table></div
@@ -27,7 +27,7 @@
           >
             <el-table-column prop="code" label="灾情码" width="140" />
             <el-table-column prop="time" label="上传时间" width="100" />
-            <el-table-column prop="position" label="经纬度" width="155" />
+            <el-table-column prop="position" label="经纬度" width="120" />
             <el-table-column prop="address" label="位置" />
           </el-table></div
       ></el-card>
@@ -94,6 +94,8 @@
 <script setup lang="ts" name="dashboard">
 import { ref, onMounted } from "vue";
 import AMapLoader from "@amap/amap-jsapi-loader";
+import earthquake_record from "../assets/data/earthquake_record.json";
+
 const name = localStorage.getItem("ms_username");
 const role: string = name === "admin" ? "超级管理员" : "普通用户";
 
@@ -119,7 +121,7 @@ interface code_info {
 
 const earthquakes_data = ref<earthquakes_info[]>([]);
 const code_data = ref<code_info[]>([]);
-
+earthquakes_data.value = earthquake_record;
 function render() {
   // 地图渲染
   window._AMapSecurityConfig = {
@@ -207,8 +209,6 @@ onMounted(() => {
   console.log(table_height.value);
   render();
 });
-
-// Todo: 从后端获取数据earthquakes_data与code_data
 
 // 测试数据
 earthquakes_data.value.push({
