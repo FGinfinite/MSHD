@@ -108,6 +108,7 @@
 <script setup>
 import { onMounted, computed, ref } from "vue";
 import { useRoute } from "vue-router";
+import axios from 'axios';
 import {
   Iphone,
   Location,
@@ -126,7 +127,7 @@ const address = ref("");
 const files = ref([]);
 const route = useRoute();
 const { query, params } = useRoute();
-var bounds = null;
+var bounds = ref([]);
 var polygons = [];
 var map = null;
 var map_data = {};
@@ -164,7 +165,52 @@ files.value = [
     url: "http://www.baidu.com",
   },
 ];
-onMounted(() => {
+
+onMounted(async() => {
+  render();
+  await fetchDataAndRender();
+});
+
+async function fetchDataAndRender() {
+  try {
+    const district = getSmallestDistrict(getSmallestDistrict(address.value));
+    const response = await axios.get(`http://localhost:7999/mshd/district/fetchDistrictData/${district}`);
+    map_data.bounds = response.data.features.map(feature => feature.geometry.coordinates)[0];
+    console.log("bounds:", bounds);
+    return response;
+  } catch (error) {
+    console.error("Error message:", error.message);
+    if (error.response) {
+      console.error("Response status:", error.response.status);
+      console.error("Response data:", error.response.data);
+    }
+  }
+}
+
+function getSmallestDistrict(address) {
+  const units = ["省", "自治州", "市", "区", "县", "镇", "乡", "村", ","];
+  let smallestDistrict = "";
+  let lastPosition = -1;
+
+  // 从最小的行政单位开始搜索，一旦找到第二个单位，就会截取该单位后面的所有字符
+  for (let i = units.length - 1; i >= 0; i--) {
+    const position = address.lastIndexOf(units[i]);
+    if (position !== -1) {
+      if (lastPosition !== -1 || units[i] === ",") {
+        smallestDistrict = address.substring(position + units[i].length).trim();
+        break;
+      } else {
+        lastPosition = position;
+      }
+    }
+  }
+
+  console.log("smallestDistrict:", smallestDistrict);
+  // 如果没有找到任何单位，返回整个地址
+  return smallestDistrict === "" ? address : smallestDistrict;
+}
+
+function render() {
   window._AMapSecurityConfig = {
     securityJsCode: "42a4943fb43edf1ae68a202b096064c4",
   };
@@ -199,7 +245,7 @@ onMounted(() => {
     .catch((e) => {
       console.log(e);
     });
-});
+}
 
 function drawBounds() {
   console.log("drawBounds");
@@ -209,6 +255,7 @@ function drawBounds() {
       map.remove(polygons);
       polygons = [];
       var bounds = map_data.bounds;
+      console.log("boudstodraw", bounds);
       if (bounds) {
         for (var i = 0; i < bounds.length; i++) {
           var polygon = new AMap.Polygon({
