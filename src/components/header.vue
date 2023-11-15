@@ -1,20 +1,18 @@
 <template>
 	<div class="header">
 		<!-- 折叠按钮 -->
-		<div class="collapse-btn" @click="collapseChage">
+		<!-- <div class="collapse-btn" @click="collapseChage">
 			<el-icon v-if="sidebar.collapse"><Expand /></el-icon>
 			<el-icon v-else><Fold /></el-icon>
-		</div>
+		</div> -->
+		<div class="topleft">
 		<div class="logo">灾情一体化管理平台</div>
+	</div>
 		<div class="header-right">
 			<div class="header-user-con">
 				<!-- 消息中心 -->
 				<div class="btn-bell" @click="router.push('/tabs')">
-					<el-tooltip
-						effect="dark"
-						:content="message ? `有${message}条未读消息` : `消息中心`"
-						placement="bottom"
-					>
+					<el-tooltip effect="dark" :content="message ? `有${message}条未读消息` : `消息中心`" placement="bottom">
 						<i class="el-icon-lx-notice"></i>
 					</el-tooltip>
 					<span class="btn-bell-badge" v-if="message"></span>
@@ -74,12 +72,30 @@ const handleCommand = (command: string) => {
 </script>
 <style scoped>
 .header {
+	display: flex;
+	justify-content: space-between;
 	position: relative;
-	box-sizing: border-box;
-	width: 100%;
+	/* box-sizing: border-box; */
+	/* width: 100%; */
 	height: 70px;
 	font-size: 22px;
 	color: #fff;
+	/* margin-left: 29px; */
+	animation: expandAnimation 0.5s ease;
+	background-color: rgb(68, 123, 99);
+}
+.header1 {
+	animation: expandAnimation 0.5s ease;
+	display: flex;
+	justify-content: space-between;
+	margin-left: -157px;
+	position: relative;
+	/* box-sizing: border-box; */
+	width: 111%;
+	height: 70px;
+	font-size: 22px;
+	color: #fff;
+	background-color: rgb(68, 123, 99);
 }
 .collapse-btn {
 	display: flex;
@@ -90,10 +106,24 @@ const handleCommand = (command: string) => {
 	padding: 0 21px;
 	cursor: pointer;
 }
+.collapse-btn1 {
+	margin-left: -157px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	float: left;
+	padding: 0 21px;
+	cursor: pointer;
+}
+.collapse-btn:hover {
+	background-color: rgb(68, 123, 99);
+}
 .header .logo {
 	float: left;
 	width: 250px;
 	line-height: 70px;
+	margin-left: 883px;
 }
 .header-right {
 	float: right;
@@ -147,5 +177,9 @@ const handleCommand = (command: string) => {
 }
 .el-dropdown-menu__item {
 	text-align: center;
+}
+.topleft {
+	display: flex;
+	align-items: center;
 }
 </style>

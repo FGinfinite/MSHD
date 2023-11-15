@@ -22,8 +22,9 @@ a {
 
 
 .content-box {
-    position: absolute;
-    left: 250px;
+	    height: 100vh;
+    /* position: absolute;
+    left: 250px; */
     right: 0;
     top: 70px;
     bottom: 0;
@@ -135,3 +136,4 @@ a {
 [hidden]{
     display: none !important;
 }
+

@@ -4,10 +4,11 @@
             class="sidebar-el-menu"
             :default-active="onRoutes"
             :collapse="sidebar.collapse"
-            background-color="#324157"
-            text-color="#bfcbd9"
-            active-text-color="#20a0ff"
-            unique-opened
+            mode="horizontal"
+            background-color="rgb(68, 123, 99)"
+			text-color="#fff"
+			active-text-color="rgb(115, 208, 166)"
+			unique-opened
             router
         >
             <template v-for="item in items">
@@ -166,7 +167,7 @@ const sidebar = useSidebarStore();
 </script>
 
 <style scoped>
-.sidebar {
+/* .sidebar {
     display: block;
     position: absolute;
     left: 0;
@@ -182,5 +183,5 @@ const sidebar = useSidebarStore();
 }
 .sidebar > ul {
     height: 100%;
-}
+} */
 </style>
