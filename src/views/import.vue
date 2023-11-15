@@ -99,7 +99,7 @@ export default {
 }
 </script>
  -->
- <template>
+<template>
   <div id="myChart" style="width:1500px;height:500px;margin:auto;"></div>
   <h3>灾情数目统计</h3>
   <h3>灾情数据载体类型统计</h3>
@@ -125,15 +125,17 @@ export default {
 
     onMounted(async () => {
       try {
-        const response = await HttpManager.fetchSourceInfoData(); 
+        const response = await HttpManager.fetchInfoData();
         if (response) {
 
           console.log('response', response);
-         
+
           response.forEach(item => {
-            const source = item.source;
-            chartData.value.seriesData[source] = item.data;
-            console.log('charData', chartData.value.seriesData);
+            if (item.hasOwnProperty('source')) {
+              const source = item.source;
+              chartData.value.seriesData[source] = item.sourcedata;
+              console.log('charData', chartData.value.seriesData);
+            }
           });
 
           renderChart();
