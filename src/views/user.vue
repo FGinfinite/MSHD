@@ -16,7 +16,7 @@
 							</span>
 						</div>
 						<div class="info-name">{{ name }}</div>
-						<div class="info-desc">不可能！我的代码怎么可能会有bug！</div>
+						<div class="info-desc">Pain is pi, small but never ending.</div>
 					</div>
 				</el-card>
 			</el-col>
@@ -78,7 +78,7 @@ const name = localStorage.getItem('ms_username');
 const form = reactive({
 	old: '',
 	new: '',
-	desc: '不可能！我的代码怎么可能会有bug！'
+	desc: 'Pain is pi, small but never ending.'
 });
 const onSubmit = () => {};
 

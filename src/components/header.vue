@@ -5,15 +5,8 @@
 	</div>
 		<div class="header-right">
 			<div class="header-user-con">
-				<!-- 消息中心
-				<div class="btn-bell" @click="router.push('/tabs')">
-					<el-tooltip effect="dark" :content="message ? `有${message}条未读消息` : `消息中心`" placement="bottom">
-						<i class="el-icon-lx-notice"></i>
-					</el-tooltip>
-					<span class="btn-bell-badge" v-if="message"></span>
-				</div> -->
 				<!-- 用户头像 -->
-				<el-avatar class="user-avator" :size="30" :src="imgurl" />
+				<el-avatar class="user-avator" :size="35" :src="imgurl" shape="square" />
 				<!-- 用户名下拉菜单 -->
 				<el-dropdown class="user-name" trigger="click" @command="handleCommand">
 					<span class="el-dropdown-link">
@@ -111,7 +104,7 @@ const handleCommand = (command: string) => {
 	float: left;
 	width: 250px;
 	line-height: 70px;
-	margin-left: 883px;
+	margin-left: 20%;
 }
 .header-right {
 	float: right;
@@ -119,7 +112,7 @@ const handleCommand = (command: string) => {
 }
 .header-user-con {
 	display: flex;
-	height: 70px;
+	height: 100%;
 	align-items: center;
 }
 .btn-fullscreen {

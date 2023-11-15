@@ -63,8 +63,11 @@
           </el-menu-item>
         </template>
       </template>
+
+      <el-card class="page_status"
+        ><div class="page_status_text">{{ route.name }}</div></el-card
+      >
     </el-menu>
-    {{ route.name }}
   </div>
 </template>
 
@@ -151,26 +154,7 @@ const route = useRoute();
 const onRoutes = computed(() => {
   return route.path;
 });
-// 获取当前页面名
-const getNowPage = () => {
-    // const nowPage = items.filter((item) => {
-    //     if (item.subs) {
-    //     return item.subs.some((subItem) => {
-    //         return subItem.index === route.path;
-    //     });
-    //     } else {
-    //     return item.index === route.path;
-    //     }
-    // });
-    // return nowPage[0].index;
-    return route.name;
-};
-var cur_page_index = getNowPage();
 // 每次切换页面时，更新页面名状态
-const updatePage = () => {
-  cur_page_index = getNowPage();
-  显示
-};
 const sidebar = useSidebarStore();
 </script>
 
@@ -181,21 +165,19 @@ const sidebar = useSidebarStore();
 .sidebar-el-menu {
   background-color: rgb(68, 123, 99);
 }
-/* .sidebar {
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 70px;
-    bottom: 0;
-    overflow-y: scroll;
+.page_status {
+  position: absolute;
+  left: 50%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: rgb(133, 208, 178);
+  color: #fff;
+  transform: translate(-50%, 0);
 }
-.sidebar::-webkit-scrollbar {
-    width: 0;
+.page_status_text {
+  height: 100%;
+  font-size: 20px;
+  text-align: center;
+  line-height: 0px;
 }
-.sidebar-el-menu:not(.el-menu--collapse) {
-    width: 250px;
-}
-.sidebar > ul {
-    height: 100%;
-} */
 </style>
