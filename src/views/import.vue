@@ -109,6 +109,7 @@ export default {
 import * as echarts from 'echarts'
 import { onMounted, ref } from "vue";
 import { fetchData } from '../api/index';
+import { HttpManager } from "../api";
 
 export default {
   setup() {
@@ -124,8 +125,10 @@ export default {
 
     onMounted(async () => {
       try {
-        const response = await HttpManager.searchDisaster(); 
+        const response = await HttpManager.fetchSourceInfoData(); 
         if (response) {
+
+          console.log('response', response);
          
           response.forEach(item => {
             const source = item.sourceInFo;
