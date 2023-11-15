@@ -283,11 +283,18 @@ const handleSearch = async () => {
 	
 	const formData = new FormData();
 	//删除地址的连字符
-	formData.set('location', query.location.replace(/,/g, ''));
+	let location = query.location;
+	if (typeof location !== 'string') {
+		location = String(location); 
+	}
+	formData.set('location', location.replace(/,/g, ''));
 
-	// formData.set('date', query.time);
 	// 从时间中提取日期部分
-    const datePart = query.time ? query.time.split(' ')[0] : '';
+	let time = query.time;
+	if (typeof time !== 'string') {
+		time = String(time); 
+	}
+    const datePart = time ? time.split(' ')[0] : '';
 	formData.set('date', datePart);
 	formData.set('sourceInfo', query.sourceInFo);
 	formData.set('carrierType', query.carrierType);
