@@ -3,19 +3,18 @@
 		<div class="container">
 			<div class="handle-box">
 				<el-cascader :options="option1" placeholder="位置" v-model="query.location"
-					style="width: 100px "></el-cascader>
+					style="width: 200px"></el-cascader>
 				<el-form-item prop="date">
-					<el-col :span="11">
+					<el-col :span="25">
 						<el-form-item prop="date1">
 							<el-date-picker type="date" placeholder="日期" v-model="query.time"
-								style="width: 40%"></el-date-picker>
+								style="width: 120px"></el-date-picker>
 						</el-form-item>
 					</el-col>
-					<el-col class="line" :span="2">-</el-col>
-
 				</el-form-item>
 				<el-cascader :options="options" placeholder="来源" v-model="query.sourceInFo"
-					style="width: 100px "></el-cascader>
+					style="width: 300px">
+				</el-cascader>
 				<el-select v-model="query.carrierType" placeholder="载体" class="handle-select mr10">
 					<el-option key="1" label="文本" value="文本"></el-option>
 					<el-option key="2" label="图片" value="图片"></el-option>
@@ -25,27 +24,29 @@
 				<el-input v-model="query.disaterId" placeholder="请输入灾情码" class="handle-input mr10"></el-input>
 				<el-button type="primary" :icon="Search" @click="handleSearch">搜索</el-button>
 			</div>
-			<el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
-				<el-table-column prop="disasterCode" label="灾情码" width="100" align="center"></el-table-column>
-				<el-table-column prop="location" label="位置" align="center"></el-table-column>
-				<el-table-column prop="date" label="时间" align="center"></el-table-column>
-				<el-table-column prop="sourceInfo" label="消息来源" align="center"></el-table-column>
-				<el-table-column prop="carrierType" label="载体" align="center"></el-table-column>
-				<el-table-column prop="disasterInfo" label="灾情信息" align="center"></el-table-column>
-				<el-table-column prop="information" label="详细信息" align="center">
-					<router-link to="/disaterinform">灾情详述</router-link>
-				</el-table-column>
-				<el-table-column label="操作" width="220" align="center">
-					<template #default="scope">
-						<el-button text :icon="Edit" @click="handleEdit(scope.$index, scope.row)" v-permiss="15">
-							编辑
-						</el-button>
-						<el-button text :icon="Delete" class="red" @click="handleDelete(scope.$index)" v-permiss="16">
-							删除
-						</el-button>
-					</template>
-				</el-table-column>
-			</el-table>
+			<div style="height: 62vh; overflow: auto;">
+				<el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
+					<el-table-column prop="disasterCode" label="灾情码" width="100" align="center"></el-table-column>
+					<el-table-column prop="location" label="位置" align="center"></el-table-column>
+					<el-table-column prop="date" label="时间" align="center"></el-table-column>
+					<el-table-column prop="sourceInfo" label="消息来源" align="center"></el-table-column>
+					<el-table-column prop="carrierType" label="载体" align="center"></el-table-column>
+					<el-table-column prop="disasterInfo" label="灾情信息" align="center"></el-table-column>
+					<el-table-column prop="information" label="详细信息" align="center">
+						<router-link to="/disaterinform">灾情详述</router-link>
+					</el-table-column>
+					<el-table-column label="操作" width="220" align="center">
+						<template #default="scope">
+							<el-button text :icon="Edit" @click="handleEdit(scope.$index, scope.row)" v-permiss="15">
+								编辑
+							</el-button>
+							<el-button text :icon="Delete" class="red" @click="handleDelete(scope.$index)" v-permiss="16">
+								删除
+							</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+			</div>
 			<div class="pagination">
 				<el-pagination background layout="total, prev, pager, next" :current-page="query.pageIndex"
 					:page-size="query.pageSize" :total="pageTotal" @current-change="handlePageChange"></el-pagination>
@@ -94,171 +95,171 @@ const options = [
 		value: '业务报送数据',
 		label: '业务报送数据',
 		children: [
-	
-	{
-		value: '前方地震应急指挥部',
-		label: '前方地震应急指挥部',
+
+			{
+				value: '前方地震应急指挥部',
+				label: '前方地震应急指挥部',
+			},
+			{
+				value: '后方地震应急指挥部',
+				label: '后方地震应急指挥部',
+			},
+			{
+				value: '应急指挥技术系统',
+				label: '应急指挥技术系统',
+			},
+			{
+
+				value: '社会服务工程应急救援系统',
+				label: '社会服务工程应急救援系统',
+
+			},
+			{
+				value: '危险区域评估工作组',
+				label: '危险区域评估工作组',
+			},
+			{
+				value: '震后政府信息支持项目组',
+				label: '震后政府信息支持项目组',
+			},
+			{
+				value: '疫情快速上报接受处理系统',
+				label: '疫情快速上报接受处理系统',
+			},
+			{
+				value: '地方地震局应急信息服务相关技术系统',
+				label: '地方地震局应急信息服务相关技术系统',
+			},
+		]
 	},
-	{
-		value: '后方地震应急指挥部',
-		label: '后方地震应急指挥部',
-	},
-	{				
-		value: '应急指挥技术系统',
-		label: '应急指挥技术系统',
-	},
-	{
-		
-		value: '社会服务工程应急救援系统',
-		label: '社会服务工程应急救援系统',
-			
-	},
-	{
-		value: '危险区域评估工作组',
-		label: '危险区域评估工作组',
-	},
-	{
-		value: '震后政府信息支持项目组',
-		label: '震后政府信息支持项目组',
-	},
-	{
-		value: '疫情快速上报接受处理系统',
-		label: '疫情快速上报接受处理系统',
-	},
-	{
-		value: '地方地震局应急信息服务相关技术系统',
-		label: '地方地震局应急信息服务相关技术系统',
-	},
-]
-},
 	{
 		value: '泛在感知数据',
 		label: '泛在感知数据',
 		children: [
-	{
-		value: '互联网感知',
-		label: '互联网感知',
-	},	
-	{
-		value: '通信网感知',
-		label: '通信网感知',
+			{
+				value: '互联网感知',
+				label: '互联网感知',
+			},
+			{
+				value: '通信网感知',
+				label: '通信网感知',
+			},
+			{
+				value: '舆情网感知',
+				label: '舆情网感知',
+			},
+			{
+				value: '电力系统感知',
+				label: '电力系统感知',
+			},
+			{
+				value: '交通系统感知',
+				label: '交通系统感知',
+			},
+		]
 	},
-	{
-		value: '舆情网感知',
-		label: '舆情网感知',
-	},
-	{
-		value: '电力系统感知',
-		label: '电力系统感知',
-	},
-	{
-		value: '交通系统感知',
-		label: '交通系统感知',
-	},
-]
-},
 	{
 		value: '其他数据',
 		label: '其他数据',
 	},
 ];
 const option1 = [
-{
-        value: '北京市',
-        label: '北京市',
-        children: [
-            {
-                value: '海淀区',
-                label: '海淀区',
-            },
-            {
-                value: '东城区',
-                label: '东城区',
-            },
-            {
-                value: '朝阳区',
-                label: '朝阳区',
-            },
-            {
-                value: '西城区',
-                label: '西城区',
-            },
-            {
-                value: '昌平区',
-                label: '昌平区',
-            },
-            {
-                value: '房山区',
-                label: '房山区',
-            },
-           
-        ],
-    },
-    {
-        value: '河北省',
-        label: '河北省',
-        children: [
-            {
-                value: '石家庄市',
-                label: '石家庄市',
-            },
-            {
-                value: '唐山市',
-                label: '唐山市',
-            },
-            {
-                value: '秦皇岛市',
-                label: '秦皇岛市',
-            },
-            {
-                value: '邯郸市',
-                label: '邯郸市',
-            },
-            {
-                value: '保定市',
-                label: '保定市',
-            },
-            {
-                value:'张家口市',
-                label:'张家口市'
-            },
-            {
-                value:'廊坊市',
-                label:'廊坊市'
-            }  
-        ],
-    },
-    {
-        value: '山西省',
-        label: '山西省',
-        children:[
-            {
-                value:'太原市',
-                label:'太原市',
+	{
+		value: '北京市',
+		label: '北京市',
+		children: [
+			{
+				value: '海淀区',
+				label: '海淀区',
+			},
+			{
+				value: '东城区',
+				label: '东城区',
+			},
+			{
+				value: '朝阳区',
+				label: '朝阳区',
+			},
+			{
+				value: '西城区',
+				label: '西城区',
+			},
+			{
+				value: '昌平区',
+				label: '昌平区',
+			},
+			{
+				value: '房山区',
+				label: '房山区',
+			},
 
-            },
-            {
-                value:'大同市',
-                label:'大同市',
-            },
-            {
-                value:'阳泉市',
-                label:'阳泉市',
-            },
-            {
-                value:'晋城市',
-                label:'晋城市',
-            },
-            {
-                value:'吕梁市',
-                label:'吕梁市',
-            },
-            {
-                value:'长治市',
-                label:'长治市',
-            }
-        ]
-    },
+		],
+	},
+	{
+		value: '河北省',
+		label: '河北省',
+		children: [
+			{
+				value: '石家庄市',
+				label: '石家庄市',
+			},
+			{
+				value: '唐山市',
+				label: '唐山市',
+			},
+			{
+				value: '秦皇岛市',
+				label: '秦皇岛市',
+			},
+			{
+				value: '邯郸市',
+				label: '邯郸市',
+			},
+			{
+				value: '保定市',
+				label: '保定市',
+			},
+			{
+				value: '张家口市',
+				label: '张家口市'
+			},
+			{
+				value: '廊坊市',
+				label: '廊坊市'
+			}
+		],
+	},
+	{
+		value: '山西省',
+		label: '山西省',
+		children: [
+			{
+				value: '太原市',
+				label: '太原市',
+
+			},
+			{
+				value: '大同市',
+				label: '大同市',
+			},
+			{
+				value: '阳泉市',
+				label: '阳泉市',
+			},
+			{
+				value: '晋城市',
+				label: '晋城市',
+			},
+			{
+				value: '吕梁市',
+				label: '吕梁市',
+			},
+			{
+				value: '长治市',
+				label: '长治市',
+			}
+		]
+	},
 ];
 interface TableItem {   //定义表格中每一项数据的结构
 	disasterCode: string;
@@ -280,19 +281,19 @@ const query = reactive({//用于查询的各种属性，如分页信息、灾害
 });
 // 查询操作
 const handleSearch = async () => {
-	
+
 	const formData = new FormData();
 	//删除地址的连字符
 	let location = query.location;
 	if (typeof location !== 'string') {
-		location = String(location); 
+		location = String(location);
 	}
 	formData.set('location', location.replace(/,/g, ''));
 
 	// formData.set('date', query.time);
 	// 从时间中提取日期部分并格式化为"YYYY-MM-DD"
-    const datePart = query.time ? new Date(query.time).toLocaleDateString('en-CA') : '';
-    formData.set('date', datePart);
+	const datePart = query.time ? new Date(query.time).toLocaleDateString('en-CA') : '';
+	formData.set('date', datePart);
 	formData.set('sourceInfo', query.sourceInFo);
 	formData.set('carrierType', query.carrierType);
 	formData.set('disasterCode', query.disaterId);
@@ -311,6 +312,7 @@ const handleSearch = async () => {
 		console.error('testHttpPost 错误', error);
 	}
 };
+
 const tableData = ref<TableItem[]>([]);//存储表格数据数组
 const pageTotal = ref(0);//存储数据总条数，用于分页
 // 获取表格数据
@@ -378,6 +380,11 @@ const saveEdit = () => {
 <style scoped>
 .handle-box {
 	margin-bottom: 20px;
+	display: flex;
+	flex-wrap: nowrap;
+	/* 防止自动换行 */
+	align-items: flex-start;
+	/* 对齐到顶部 */
 }
 
 .handle-select {
@@ -406,5 +413,4 @@ const saveEdit = () => {
 	margin: auto;
 	width: 40px;
 	height: 40px;
-}
-</style>
+}</style>
