@@ -25,7 +25,7 @@
             :height="table_height"
             class="recent_table"
           >
-            <el-table-column prop="code" label="灾情码" width="140" />
+            <el-table-column prop="code" label="灾情码" width="310" />
             <el-table-column prop="time" label="上传时间" width="100" />
             <el-table-column prop="position" label="经纬度" width="120" />
             <el-table-column prop="address" label="位置" />
@@ -212,11 +212,10 @@ onMounted(async () => {
 	render();
 });
 
-// Todo: 从后端获取数据earthquakes_data与code_data
 async function fetchRecent5Disaster() {
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await axios.get(`http://localhost:7999/mshd/disaster/fetchRecent5Disaster`);
+            const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchRecent5Disaster`);
             console.log("search---")
             if (response && response.data && response.data.length > 0) {
                 code_data.value.push(...response.data.map((item: {
@@ -241,20 +240,6 @@ async function fetchRecent5Disaster() {
     });
 }
 
-// 测试数据
-earthquakes_data.value.push({
-	level: 5.9,
-	time: "2023-11-14 20:52:25",
-	positon: [148.2, -6.1],
-	depth: 10,
-	address: "新不列颠岛地区",
-});
-// code_data.value.push({
-// 	code: "110101002003",
-// 	address: "吉林省延边朝鲜族自治州和龙市",
-// 	time: "2021-08-01 10:00:00",
-// 	position: [129.0, 42.0],
-// });
 </script>
 
 <style scoped>
