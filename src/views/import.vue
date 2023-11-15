@@ -131,8 +131,9 @@ export default {
           console.log('response', response);
          
           response.forEach(item => {
-            const source = item.sourceInFo;
+            const source = item.source;
             chartData.value.seriesData[source] = item.data;
+            console.log('charData', chartData.value.seriesData);
           });
 
           renderChart();
