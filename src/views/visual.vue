@@ -8,8 +8,8 @@
           style="width: 100%"
           :height="table_height"
         >
-          <el-table-column prop="code" label="编码" width="120" />
-          <el-table-column prop="address" label="位置" width="250" />
+          <el-table-column prop="code" label="编码" width="320" />
+          <el-table-column prop="address" label="位置" width="150" />
           <el-table-column prop="date" label="时间" width="160" />
           <el-table-column label="操作">
             <template #default="scope">
@@ -105,7 +105,7 @@ async function fetchDataFromDatabase() {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await axios.get(
-        `http://localhost:7999/mshd/disaster/fetchAllDisaster`
+        `http://10.29.52.19:7999/mshd/disaster/fetchAllDisaster`
       );
       if (response && response.data && response.data.length > 0) {
         tableData.value.push(
@@ -134,7 +134,7 @@ async function fetchDataAndRender(address) {
   try {
     const district = getSmallestDistrict(address);
     const response = await axios.get(
-      `http://localhost:7999/mshd/district/fetchDistrictData/${district}`
+      `http://10.29.52.19:7999/mshd/district/fetchDistrictData/${district}`
     );
     main_map_data.features.push(...response.data.features);
     console.log("response data:", response.data);

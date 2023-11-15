@@ -1,90 +1,101 @@
 <template>
-	<el-container style="height: 100%">
-		<el-aside width="800px" id="aside_tables">
-			<el-card shadow="hover" class="table_card" header="近期地震报告">
-				<div class="recent_table_container">
-					<el-table :data="earthquakes_data" border :height="table_height" class="recent_table">
-						<el-table-column prop="level" label="震级(M)" width="80" />
-						<el-table-column prop="time" label="发震时刻(UTC+8)" width="155" />
-						<el-table-column prop="positon" label="经纬度" width="100" />
-						<el-table-column prop="depth" label="深度(km)" width="60" />
-						<el-table-column prop="address" label="参考位置" />
-					</el-table>
-				</div>
-			</el-card>
+  <el-container style="height: 100%">
+    <el-aside width="800px" id="aside_tables">
+      <el-card shadow="hover" class="table_card" header="近期地震报告">
+        <div class="recent_table_container">
+          <el-table
+            :data="earthquakes_data"
+            border
+            :height="table_height"
+            class="recent_table"
+          >
+            <el-table-column prop="level" label="震级(M)" width="80" />
+            <el-table-column prop="time" label="发震时刻(UTC+8)" width="155" />
+            <el-table-column prop="positon" label="经纬度" width="120" />
+            <el-table-column prop="depth" label="深度(km)" width="60" />
+            <el-table-column prop="address" label="参考位置" />
+          </el-table></div
+      ></el-card>
 
-			<el-card shadow="hover" class="table_card" header="近期灾情数据">
-				<div class="recent_table_container">
-					<el-table :data="code_data" border :height="table_height" class="recent_table">
-						<el-table-column prop="code" label="灾情码" width="140" />
-						<el-table-column prop="time" label="上传时间" width="100" />
-						<el-table-column prop="position" label="经纬度" width="155" />
-						<el-table-column prop="address" label="位置" />
-					</el-table>
-				</div>
-			</el-card>
-		</el-aside>
-		<el-container>
-			<el-header>
-				<el-row :gutter="1" class="mgb20">
-					<el-col :span="8">
-						<el-card shadow="hover" :body-style="{ padding: '0px' }">
-							<div class="grid-content grid-con-1">
-								<el-icon class="grid-con-icon">
-									<Document />
-								</el-icon>
-								<div class="grid-cont-right">
-									<div class="grid-num">1234</div>
-									<div class="grid-text">本周灾情码</div>
-								</div>
-							</div>
-						</el-card>
-					</el-col>
-					<el-col :span="8">
-						<el-card shadow="hover" :body-style="{ padding: '0px' }">
-							<div class="grid-content grid-con-2">
-								<el-icon class="grid-con-icon">
-									<Files />
-								</el-icon>
-								<div class="grid-cont-right">
-									<div class="grid-num">321</div>
-									<div class="grid-text">本月灾情码</div>
-								</div>
-							</div>
-						</el-card>
-					</el-col>
-					<el-col :span="8">
-						<el-card shadow="hover" :body-style="{ padding: '0px' }">
-							<div class="grid-content grid-con-3">
-								<el-icon class="grid-con-icon">
-									<DocumentCopy />
-								</el-icon>
-								<div class="grid-cont-right">
-									<div class="grid-num">5000</div>
-									<div class="grid-text">灾情码总数</div>
-								</div>
-							</div>
-						</el-card>
-					</el-col>
-				</el-row>
-			</el-header>
-			<el-main>
-				<el-container direction="horizontal" style="height: 80%; width: 100%">
-					<el-card shadow="hover" header="近期地震分布" class="map_container_card">
-						<div id="earthquake_map_container"></div>
-					</el-card>
-					<el-card shadow="hover" header="近期灾情数据分布" class="map_container_card">
-						<div id="code_map_container"></div>
-					</el-card>
-				</el-container>
-			</el-main>
-		</el-container>
-	</el-container>
+      <el-card shadow="hover" class="table_card" header="近期灾情数据">
+        <div class="recent_table_container">
+          <el-table
+            :data="code_data"
+            border
+            :height="table_height"
+            class="recent_table"
+          >
+            <el-table-column prop="code" label="灾情码" width="310" />
+            <el-table-column prop="time" label="上传时间" width="100" />
+            <el-table-column prop="position" label="经纬度" width="120" />
+            <el-table-column prop="address" label="位置" />
+          </el-table></div
+      ></el-card>
+    </el-aside>
+    <el-container>
+      <el-header>
+        <el-row :gutter="1" class="mgb20">
+          <el-col :span="8">
+            <el-card shadow="hover" :body-style="{ padding: '0px' }">
+              <div class="grid-content grid-con-1">
+                <el-icon class="grid-con-icon"><Document /></el-icon>
+                <div class="grid-cont-right">
+                  <div class="grid-num">1234</div>
+                  <div class="grid-text">本周灾情码</div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :span="8">
+            <el-card shadow="hover" :body-style="{ padding: '0px' }">
+              <div class="grid-content grid-con-2">
+                <el-icon class="grid-con-icon"><Files /></el-icon>
+                <div class="grid-cont-right">
+                  <div class="grid-num">321</div>
+                  <div class="grid-text">本月灾情码</div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :span="8">
+            <el-card shadow="hover" :body-style="{ padding: '0px' }">
+              <div class="grid-content grid-con-3">
+                <el-icon class="grid-con-icon"><DocumentCopy /></el-icon>
+                <div class="grid-cont-right">
+                  <div class="grid-num">5000</div>
+                  <div class="grid-text">灾情码总数</div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-header>
+      <el-main>
+        <el-container direction="horizontal" style="height: 80%; width: 100%">
+          <el-card
+            shadow="hover"
+            header="近期地震分布"
+            class="map_container_card"
+          >
+            <div id="earthquake_map_container"></div>
+          </el-card>
+          <el-card
+            shadow="hover"
+            header="近期灾情数据分布"
+            class="map_container_card"
+            ><div id="code_map_container"></div
+          ></el-card>
+        </el-container>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script setup lang="ts" name="dashboard">
 import { ref, onMounted } from "vue";
 import AMapLoader from "@amap/amap-jsapi-loader";
+import earthquake_record from "../assets/data/earthquake_record.json";
+
 import axios from 'axios';
 const name = localStorage.getItem("ms_username");
 const role: string = name === "admin" ? "超级管理员" : "普通用户";
@@ -111,7 +122,7 @@ interface code_info {
 
 const earthquakes_data = ref<earthquakes_info[]>([]);
 const code_data = ref<code_info[]>([]);
-
+earthquakes_data.value = earthquake_record;
 function render() {
 	// 地图渲染
 	window._AMapSecurityConfig = {
@@ -201,11 +212,10 @@ onMounted(async () => {
 	render();
 });
 
-// Todo: 从后端获取数据earthquakes_data与code_data
 async function fetchRecent5Disaster() {
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await axios.get(`http://localhost:7999/mshd/disaster/fetchRecent5Disaster`);
+            const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchRecent5Disaster`);
             console.log("search---")
             if (response && response.data && response.data.length > 0) {
                 code_data.value.push(...response.data.map((item: {
@@ -230,20 +240,6 @@ async function fetchRecent5Disaster() {
     });
 }
 
-// 测试数据
-earthquakes_data.value.push({
-	level: 5.9,
-	time: "2023-11-14 20:52:25",
-	positon: [148.2, -6.1],
-	depth: 10,
-	address: "新不列颠岛地区",
-});
-// code_data.value.push({
-// 	code: "110101002003",
-// 	address: "吉林省延边朝鲜族自治州和龙市",
-// 	time: "2021-08-01 10:00:00",
-// 	position: [129.0, 42.0],
-// });
 </script>
 
 <style scoped>
