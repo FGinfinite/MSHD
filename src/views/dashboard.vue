@@ -40,7 +40,7 @@
               <div class="grid-content grid-con-1">
                 <el-icon class="grid-con-icon"><Document /></el-icon>
                 <div class="grid-cont-right">
-                  <div class="grid-num">1234</div>
+                  <div class="grid-num">{{count_week}}</div>
                   <div class="grid-text">本周灾情码</div>
                 </div>
               </div>
@@ -51,7 +51,7 @@
               <div class="grid-content grid-con-2">
                 <el-icon class="grid-con-icon"><Files /></el-icon>
                 <div class="grid-cont-right">
-                  <div class="grid-num">321</div>
+                  <div class="grid-num">{{count_month}}</div>
                   <div class="grid-text">本月灾情码</div>
                 </div>
               </div>
@@ -62,7 +62,7 @@
               <div class="grid-content grid-con-3">
                 <el-icon class="grid-con-icon"><DocumentCopy /></el-icon>
                 <div class="grid-cont-right">
-                  <div class="grid-num">5000</div>
+                  <div class="grid-num">{{count_total}}</div>
                   <div class="grid-text">灾情码总数</div>
                 </div>
               </div>
@@ -99,6 +99,10 @@ import earthquake_record from "../assets/data/earthquake_record.json";
 import axios from 'axios';
 const name = localStorage.getItem("ms_username");
 const role: string = name === "admin" ? "超级管理员" : "普通用户";
+
+const count_total = ref(0);
+const count_month = ref(0);
+const count_week = ref(0);
 
 var earthquake_map = null;
 var code_map = null;
@@ -211,6 +215,12 @@ onMounted(async () => {
 	console.log(table_height.value);
 	render();
 });
+
+async function fetchAllDisasterCount() {
+	try {
+		const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchRecent5Disaster`)
+	}
+}
 
 async function fetchRecent5Disaster() {
     return new Promise(async (resolve, reject) => {
