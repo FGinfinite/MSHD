@@ -101,8 +101,8 @@ const name = localStorage.getItem("ms_username");
 const role: string = name === "admin" ? "超级管理员" : "普通用户";
 
 const count_total = ref(0);
-const count_month = ref(0);
-const count_week = ref(0);
+const count_month = ref(4);
+const count_week = ref(5);
 
 var earthquake_map = null;
 var code_map = null;
@@ -209,6 +209,9 @@ function render() {
 }
 
 onMounted(async () => {
+	await fetchWeekDisasterCount();
+	await fetchMonthDisasterCount();
+	await fetchAllDisasterCount();
 	await fetchRecent5Disaster();
 	table_height.value =
 		document.getElementsByClassName("table_card")[0].offsetHeight * 0.8;
@@ -218,8 +221,30 @@ onMounted(async () => {
 
 async function fetchAllDisasterCount() {
 	try {
-		const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchRecent5Disaster`)
-	} catch {}
+		const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchAllDisasterCount`);
+		console.log("all response", response);
+		count_total.value = response.data;
+	} catch {
+
+	}
+}
+async function fetchMonthDisasterCount() {
+	try {
+		const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchCurrentMonthDisasterCount`);
+		console.log("all response", response);
+		count_month.value = response.data;
+	} catch {
+
+	}
+}
+async function fetchWeekDisasterCount() {
+	try {
+		const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchCurrentWeekDisasterCount`);
+		console.log("all response", response);
+		count_week.value = response.data;
+	} catch {
+
+	}
 }
 
 async function fetchRecent5Disaster() {
