@@ -219,7 +219,7 @@ onMounted(async () => {
 async function fetchAllDisasterCount() {
 	try {
 		const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchRecent5Disaster`)
-	}
+	} catch {}
 }
 
 async function fetchRecent5Disaster() {
