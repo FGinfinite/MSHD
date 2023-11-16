@@ -35,6 +35,7 @@
           <el-radio label="图片"></el-radio>
           <el-radio label="音频"></el-radio>
           <el-radio label="视频"></el-radio>
+          <el-radio label="文本"></el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="灾情描述" prop="desc" rules="rules">
