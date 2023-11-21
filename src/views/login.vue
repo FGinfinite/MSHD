@@ -25,7 +25,7 @@
 				<div class="login-btn">
 					<el-button type="primary" @click="submitForm(login)">登录</el-button>
 				</div>
-				<p class="login-tips">Tips : 用户名和密码随便填。</p>
+				<p class="login-tips">如遇账户登录相关问题，请邮件联系kidnobodyz@bupt.edu.cn</p>
 			</el-form>
 		</div>
 	</div>
