@@ -5,7 +5,7 @@ import Home from '../views/home.vue';
 const routes: RouteRecordRaw[] = [
     {
         path: '/',
-        redirect: '/dashboard',
+        redirect: '/login',
     },
     {
         path: '/',

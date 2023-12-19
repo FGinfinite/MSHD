@@ -106,12 +106,6 @@ const items = [
       },
     ],
   },
-  // {
-  //     icon: 'DocumentCopy',
-  //     index: '/tabs',
-  //     title: 'tab选项卡',
-  //     permiss: '3',
-  // },
   {
     icon: "Edit",
     index: "3",
