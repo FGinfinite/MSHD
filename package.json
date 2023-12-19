@@ -4,9 +4,9 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite",
-		"build": "vue-tsc --noEmit && vite build",
-		"serve": "vite preview"
-	},
+		"build": "vite build",
+		"preview": "vite preview"
+	  },
 	"dependencies": {
 		"@amap/amap-jsapi-loader": "^1.0.1",
 		"@element-plus/icons-vue": "^2.0.9",

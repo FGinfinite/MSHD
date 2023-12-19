@@ -174,7 +174,7 @@ onMounted(async() => {
 async function fetchDataAndRender() {
   try {
     const district = getSmallestDistrict(getSmallestDistrict(address.value));
-    const response = await axios.get(`http://localhost:7999/mshd/district/fetchDistrictData/${district}`);
+    const response = await axios.get(`http://120.46.156.180:7999/mshd/district/fetchDistrictData/${district}`);
     map_data.bounds = response.data.features.map(feature => feature.geometry.coordinates)[0];
     console.log("bounds:", bounds);
     return response;

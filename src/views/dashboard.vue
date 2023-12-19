@@ -101,8 +101,8 @@ const name = localStorage.getItem("ms_username");
 const role: string = name === "admin" ? "超级管理员" : "普通用户";
 
 const count_total = ref(0);
-const count_month = ref(4);
-const count_week = ref(5);
+const count_month = ref(0);
+const count_week = ref(0);
 
 var earthquake_map = null;
 var code_map = null;
@@ -221,7 +221,7 @@ onMounted(async () => {
 
 async function fetchAllDisasterCount() {
 	try {
-		const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchAllDisasterCount`);
+		const response = await axios.get(`http://120.46.156.180:7999/mshd/disaster/fetchAllDisasterCount`);
 		console.log("all response", response);
 		count_total.value = response.data;
 	} catch {
@@ -230,7 +230,7 @@ async function fetchAllDisasterCount() {
 }
 async function fetchMonthDisasterCount() {
 	try {
-		const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchCurrentMonthDisasterCount`);
+		const response = await axios.get(`http://120.46.156.180:7999/mshd/disaster/fetchCurrentMonthDisasterCount`);
 		console.log("all response", response);
 		count_month.value = response.data;
 	} catch {
@@ -239,7 +239,7 @@ async function fetchMonthDisasterCount() {
 }
 async function fetchWeekDisasterCount() {
 	try {
-		const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchCurrentWeekDisasterCount`);
+		const response = await axios.get(`http://120.46.156.180:7999/mshd/disaster/fetchCurrentWeekDisasterCount`);
 		console.log("all response", response);
 		count_week.value = response.data;
 	} catch {
@@ -250,7 +250,7 @@ async function fetchWeekDisasterCount() {
 async function fetchRecent5Disaster() {
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchRecent5Disaster`);
+            const response = await axios.get(`http://120.46.156.180:7999/mshd/disaster/fetchRecent5Disaster`);
             console.log("search---")
             if (response && response.data && response.data.length > 0) {
                 code_data.value.push(...response.data.map((item: {
@@ -259,7 +259,7 @@ async function fetchRecent5Disaster() {
                     code: item.disaster.disasterCode,
                     address: item.disaster.location,
                     time: item.disaster.date,
-                    position: item.position.split(',').map(Number), 
+                    position: (item.position || "").split(',').map(Number), 
                 })));
                 console.log("tableData:", code_data.value);
             }
