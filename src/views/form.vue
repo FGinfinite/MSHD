@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="form-box">
-      <el-form ref="formRef" :rules="rules" :model="form" label-width="80px">
+      <el-form ref="formRef" :model="form" label-width="80px">
         <el-form-item label="编码" prop="name">
           <el-input v-model="form.disasterId"></el-input>
         </el-form-item>
@@ -54,6 +54,7 @@ const onsubmit = async () => {
     }
     // ...
   } catch (error) {
+    ElMessage.error("上传失败，请检查输入格式");
     console.error("testHttpPost 错误", error);
     // 处理错误
     // ...

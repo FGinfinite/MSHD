@@ -153,8 +153,8 @@ const options = [
 ];
 const option1 = [
   {
-    value: "北京",
-    label: "北京",
+    value: "北京市",
+    label: "北京市",
     children: [
       {
         value: "海淀区",

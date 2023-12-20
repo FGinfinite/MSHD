@@ -221,8 +221,8 @@ onMounted(async () => {
 
 async function fetchAllDisasterCount() {
 	try {
-		const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchAllDisasterCount`);
-		console.log("all response", response);
+		const response = await axios.get(`http://120.46.156.180:7999/mshd/disaster/fetchAllDisasterCount`);
+		console.log("total count", response);
 		count_total.value = response.data;
 	} catch {
 
@@ -230,8 +230,8 @@ async function fetchAllDisasterCount() {
 }
 async function fetchMonthDisasterCount() {
 	try {
-		const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchCurrentMonthDisasterCount`);
-		console.log("all response", response);
+		const response = await axios.get(`http://120.46.156.180:7999/mshd/disaster/fetchCurrentMonthDisasterCount`);
+		console.log("month count", response);
 		count_month.value = response.data;
 	} catch {
 
@@ -239,8 +239,8 @@ async function fetchMonthDisasterCount() {
 }
 async function fetchWeekDisasterCount() {
 	try {
-		const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchCurrentWeekDisasterCount`);
-		console.log("all response", response);
+		const response = await axios.get(`http://120.46.156.180:7999/mshd/disaster/fetchCurrentWeekDisasterCount`);
+		console.log("week count", response);
 		count_week.value = response.data;
 	} catch {
 
@@ -248,31 +248,33 @@ async function fetchWeekDisasterCount() {
 }
 
 async function fetchRecent5Disaster() {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const response = await axios.get(`http://10.29.52.19:7999/mshd/disaster/fetchRecent5Disaster`);
-            console.log("search---")
-            if (response && response.data && response.data.length > 0) {
-                code_data.value.push(...response.data.map((item: {
-                    [x: string]: any; disasterCode: any; location: any; date: any; position: any;
-                }) => ({
-                    code: item.disaster.disasterCode,
-                    address: item.disaster.location,
-                    time: item.disaster.date,
-                    position: (item.position || "").split(',').map(Number), 
-                })));
-                console.log("tableData:", code_data.value);
-            }
-            resolve(code_data.value);
-        } catch (error) {
-            console.error('Error message:', error.message);
-            if (error.response) {
-                console.error('Response status:', error.response.status);
-                console.error('Response data:', error.response.data);
-            }
-            reject(error);
+    try {
+        const response = await axios.get(`http://120.46.156.180:7999/mshd/disaster/fetchRecent5Disaster`);
+        console.log("search---")
+        if (response && response.data && response.data.length > 0) {
+            // Clear the existing data
+            code_data.value = [];
+
+            // Push new data onto the array
+            code_data.value.push(...response.data.map((item: {
+                [x: string]: any; disasterCode: any; location: any; date: any; position: any;
+            }) => ({
+                code: item.disaster.disasterCode,
+                address: item.disaster.location,
+                time: item.disaster.date,
+                position: (item.position || "").split(',').map(Number), 
+            })));
+            console.log("tableData:", code_data.value);
         }
-    });
+        return code_data.value;
+    } catch (error: any) {
+        console.error('Error message:', error.message);
+        if (error.response) {
+            console.error('Response status:', error.response.status);
+            console.error('Response data:', error.response.data);
+        }
+        throw error;
+    }
 }
 
 </script>
