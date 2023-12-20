@@ -105,7 +105,7 @@ async function fetchDataFromDatabase() {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await axios.get(
-        `http://120.46.156.180:7999/mshd/disaster/fetchAllDisaster`
+        `http://10.29.52.19:7999/mshd/disaster/fetchAllDisaster`
       );
       if (response && response.data && response.data.length > 0) {
         tableData.value.push(
@@ -134,7 +134,7 @@ async function fetchDataAndRender(address) {
   try {
     const district = getSmallestDistrict(address);
     const response = await axios.get(
-      `http://120.46.156.180:7999/mshd/district/fetchDistrictData/${district}`
+      `http://10.29.52.19:7999/mshd/district/fetchDistrictData/${district}`
     );
     main_map_data.features.push(...response.data.features);
     console.log("response data:", response.data);

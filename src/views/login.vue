@@ -111,10 +111,29 @@ const rules: FormRules = {
       trigger: "blur",
     },
   ],
-  password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+  // password: [{ required: true, message: "请输入密码", trigger: "blur" }],
 };
 const permiss = usePermissStore();
 const login = ref<FormInstance>();
+
+const clearForm = () => {
+  param.username = '';
+  param.password = '';
+  param.registerPassword = '';
+  param.confirmPassword = '';
+};
+
+const register = (formEl: FormInstance | undefined) => {
+  if (formEl) formEl.resetFields(); // 重置表单验证状态
+  clearForm(); // 清除表单内容
+  if (leftButtonStatus.value == "登录") {
+    leftButtonStatus.value = "注册";
+    registerButtonStatus.value = "切换登录";
+  } else {
+    leftButtonStatus.value = "登录";
+    registerButtonStatus.value = "切换注册";
+  }
+};
 
 async function fetchLoginStatus() {
   try {
@@ -122,8 +141,8 @@ async function fetchLoginStatus() {
     formdata.append("username", param.username);
     formdata.append("password", param.password);
     const response: any = await HttpManager.tryLogin(formdata);
-    if (response && response.length > 0) {
-      return response[0].status;
+    if (response && response.status) {
+        return response.status;
     }
   } catch (e) {
     console.log(e);
@@ -136,8 +155,8 @@ async function fetchRegisterStatus() {
     formdata.append("username", param.username);
     formdata.append("password", param.registerPassword);
     const response: any = await HttpManager.tryRegister(formdata);
-    if (response && response.length > 0) {
-      return response[0].status;
+    if (response && response.status) {
+        return response.status;
     }
   } catch (e) {
     console.log(e);
@@ -180,7 +199,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
               leftButtonStatus.value = "登录";
               registerButtonStatus.value = "切换注册";
             } else {
-              ElMessage.error("注册失败");
+              ElMessage.error("注册失败，该用户名已存在");
             }
           });
         }
@@ -192,16 +211,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
   });
 };
 
-const register = (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  if (leftButtonStatus.value == "登录") {
-    leftButtonStatus.value = "注册";
-    registerButtonStatus.value = "切换登录";
-  } else {
-    leftButtonStatus.value = "登录";
-    registerButtonStatus.value = "切换注册";
-  }
-};
+
 
 const tags = useTagsStore();
 tags.clearTags();

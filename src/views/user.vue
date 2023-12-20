@@ -30,10 +30,10 @@
           <el-form label-width="90px">
             <el-form-item label="用户名："> {{ name }} </el-form-item>
             <el-form-item label="旧密码：">
-              <el-input type="password" v-model="form.old"></el-input>
+              <el-input type="password" v-model="form.old" placeholder="请输入旧密码"></el-input>
             </el-form-item>
             <el-form-item label="新密码：">
-              <el-input type="password" v-model="form.new"></el-input>
+              <el-input type="password" v-model="form.new" placeholder="请输入新密码"></el-input>
             </el-form-item>
             <el-form-item label="个人简介：">
               <el-input v-model="form.desc"></el-input>
@@ -55,26 +55,13 @@
       </el-col>
     </el-row>
     <el-dialog title="裁剪图片" v-model="dialogVisible" width="600px">
-      <vue-cropper
-        ref="cropper"
-        :src="imgSrc"
-        :ready="cropImage"
-        :zoom="cropImage"
-        :cropmove="cropImage"
-        style="width: 100%; height: 400px"
-      ></vue-cropper>
+      <vue-cropper ref="cropper" :src="imgSrc" :ready="cropImage" :zoom="cropImage" :cropmove="cropImage"
+        style="width: 100%; height: 400px"></vue-cropper>
 
       <template #footer>
         <span class="dialog-footer">
-          <el-button class="crop-demo-btn" type="primary"
-            >选择图片
-            <input
-              class="crop-input"
-              type="file"
-              name="image"
-              accept="image/*"
-              @change="setImage"
-            />
+          <el-button class="crop-demo-btn" type="primary">选择图片
+            <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage" />
           </el-button>
           <el-button type="primary" @click="saveAvatar">上传并保存</el-button>
         </span>
@@ -95,7 +82,7 @@ import { useRouter } from "vue-router";
 const name = localStorage.getItem("ms_username");
 const quote = ref("I love MSHD.");
 const form = reactive({
-  name: "",
+  name: localStorage.getItem("ms_username") || "",
   old: "",
   new: "",
   desc: "",
@@ -118,44 +105,47 @@ async function fetchChangePasswordStatus() {
     formdata.append("old_password", form.old);
     formdata.append("new_password", form.new);
     const response: any = await HttpManager.tryChangePassword(formdata);
-    if (response && response.length > 0) {
-      return response[0].status;
+    if (response && response.status) {
+      return response.status;
     }
   } catch (e) {
     console.log(e);
   }
 }
 
-const onSubmit = () => {
+const onSubmit = async () => { // Make this an async function
   let passwordchangeflag = false;
   let descchangeflag = false;
+
+  // Reset flags at the beginning
+  passwordchangeflag = false;
+  descchangeflag = false;
+
   if (form.old != "" || form.new != "") {
     if (form.old == "") {
       ElMessage.error("请输入旧密码");
     } else if (form.new == "") {
       ElMessage.error("请输入新密码");
     } else {
-      fetchChangePasswordStatus().then((status) => {
-        if (status == "success") {
-          passwordchangeflag = true;
-        } else {
-          ElMessage.error("旧密码验证错误，密码修改失败");
-        }
-      });
+      const status = await fetchChangePasswordStatus(); // Await the async function
+      if (status == "success") {
+        passwordchangeflag = true;
+      } else {
+        ElMessage.error("旧密码验证错误，密码修改失败");
+        return; // Early return if there's an error
+      }
     }
   }
+  
   if (form.desc != quote.value) {
     quote.value = form.desc;
     localStorage.setItem("ms_quote", quote.value);
     descchangeflag = true;
   }
 
-  if (passwordchangeflag && descchangeflag) {
-    ElMessage.success("密码与简介修改成功");
-  } else if (passwordchangeflag) {
-    ElMessage.success("密码修改成功");
-  } else if (descchangeflag) {
-    ElMessage.success("简介修改成功");
+  // Only show success if a change occurred
+  if (passwordchangeflag || descchangeflag) {
+    ElMessage.success("修改成功");
   }
 };
 
@@ -164,8 +154,8 @@ async function fetchLogoffStatus() {
     const formdata = new FormData();
     formdata.append("username", form.name);
     const response: any = await HttpManager.tryLogoff(formdata);
-    if (response && response.length > 0) {
-      return response[0].status;
+    if (response && response.status) {
+      return response.status;
     }
   } catch (e) {
     console.log(e);
@@ -236,6 +226,7 @@ const saveAvatar = () => {
   text-align: center;
   padding: 35px 0;
 }
+
 .info-image {
   position: relative;
   margin: auto;
@@ -260,22 +251,27 @@ const saveAvatar = () => {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+
 .info-edit i {
   color: #eee;
   font-size: 25px;
 }
+
 .info-image:hover .info-edit {
   opacity: 1;
 }
+
 .info-name {
   margin: 15px 0 10px;
   font-size: 24px;
   font-weight: 500;
   color: #262626;
 }
+
 .crop-demo-btn {
   position: relative;
 }
+
 .crop-input {
   position: absolute;
   width: 100px;
