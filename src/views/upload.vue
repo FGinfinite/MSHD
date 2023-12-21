@@ -254,6 +254,7 @@ const rules: FormRules = {
   options: [{ required: true, message: "请输入", trigger: "blur" }],
   resource: [{ required: true, message: "请输入", trigger: "blur" }],
   rules: [{ required: true, message: "请输入", trigger: "blur" }],
+  desc: [{ required: true, message: "请输入", trigger: "blur" }],
 };
 const formRef = ref<FormInstance>();
 const form = reactive({

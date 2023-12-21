@@ -150,19 +150,14 @@ console.log(address.value);
 
 files.value = [
   {
-    name: "文件1",
-    type: ".pdf",
-    url: "http://www.baidu.com",
-  },
-  {
-    name: "文件2",
+    name: "灾情图片",
     type: ".jpg",
-    url: "http://www.baidu.com",
+    url: "http://mshd.qizhihuanying.top/files/wic872523rkciavjauf/灾情图.jpg",
   },
   {
-    name: "文件3",
+    name: "灾情文档",
     type: ".doc",
-    url: "http://www.baidu.com",
+    url: "http://mshd.qizhihuanying.top/files/wic872523rkciavjauf/灾情报告.docx",
   },
 ];
 
